@@ -45,16 +45,16 @@ public class ApplyService {
     public void memberDeny(Long user_id, Long post_id) {
 //        historyRepository.findByMemberId(user_id)
         Apply findApply = applyRepository.findApplyWithPostAndUser(user_id, post_id);
-        User findApplyUser = findApply.getUser();
-        findApplyUser.plusDeposit(findApply.getUserDeposit());
+        User findUser = findApply.getUser();
+        findUser.plusDeposit(findApply.getUserDeposit());
         applyRepository.deleteApply(findApply);
         History findHistory = historyRepository.findHistoryByApplyId(findApply.getId());
         findHistory.setApply(null);
 
         History saveHistory = History.builder()
-                .member(findApplyUser)
-                .cost(findApplyUser.getDeposit())
-                .balance(findApplyUser.getDeposit())
+                .member(findUser)
+                .cost(findApply.getUserDeposit())
+                .balance(findUser.getDeposit())
                 .type(HistoryType.REFUND)
                 .build();
         historyRepository.saveHistory(saveHistory);
