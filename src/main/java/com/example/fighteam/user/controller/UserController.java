@@ -1,6 +1,7 @@
 package com.example.fighteam.user.controller;
 
 import com.example.fighteam.user.domain.repository.User;
+import com.example.fighteam.user.domain.repository.UserRepository;
 import com.example.fighteam.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +28,11 @@ public class UserController {
     @GetMapping("/user/join")
     public String createUserForm() {
         return "joinlogin/join";
+    }
+
+    @GetMapping("/user/edit")
+    public String editUserForm() {
+        return "joinlogin/userEdit";
     }
 
     //회원가입
@@ -51,6 +58,18 @@ public class UserController {
 
         model.addAttribute("name", user.getName());
         return "redirect:/post/home";
+    }
+
+    //회원정보수정
+    @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
+    public String editUser(User member,Model model) {
+        User user = userService.editUser(member.getEmail());
+
+        System.out.println(user.getEmail());
+        model.addAttribute("email", user.getEmail());
+
+
+        return "joinlogin/userEdit";
     }
 
     //로그아웃
