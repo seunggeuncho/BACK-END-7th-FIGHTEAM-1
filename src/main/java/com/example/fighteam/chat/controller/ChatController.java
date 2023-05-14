@@ -33,7 +33,9 @@ public class ChatController {
         if(findUser.equals(loginUser)) return "redirect:/mypageChat";
         else {
             ChatRoom chatRoom = chatRoomRepository.findByUserIdAndPostUserId(loginUser, findUser).orElse(null);
+            ChatRoom chatRoom1 = chatRoomRepository.findByUserIdAndPostUserId(findUser, loginUser).orElse(null);
             if(chatRoom!=null) return "redirect:/chat/room/enter/" + chatRoom.getId();
+            if(chatRoom1!=null) return "redirect:/chat/room/enter/" + chatRoom1.getId();
             Long[] chatMember = {findUser, loginUser};
             Long chatRoomId = chatService.createChat(chatMember);
             return "redirect:/chat/room/enter/" + chatRoomId;
