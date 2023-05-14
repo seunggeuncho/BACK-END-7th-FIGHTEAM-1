@@ -24,7 +24,7 @@ public class ApplyRepository {
     }
 
     public int findCountByPostId(Long id) {
-        Long singleResult = em.createQuery("select count(a) from Apply a where a.post.id =:id and a.status = 'true'", Long.class)
+        Long singleResult = em.createQuery("select count(a) from Apply a where a.post.id =:id ", Long.class)
                 .setParameter("id", id)
                 .getSingleResult();
         return singleResult.intValue();
@@ -44,7 +44,7 @@ public class ApplyRepository {
     }
 
     public List<Apply> findAnotherApply(Long memberId, Long postId) {
-        return em.createQuery("select a from Apply a where a.user.id != :id and a.status = 'true' and a.post.id =: postId ", Apply.class)
+        return em.createQuery("select a from Apply a where a.user.id != :id and a.post.id =: postId ", Apply.class)
                 .setParameter("id", memberId)
                 .setParameter("postId", postId)
                 .getResultList();

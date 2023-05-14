@@ -31,7 +31,7 @@ public class PenaltyService {
 
         int countMember = applyRepository.findCountByPostId(postId); //벌금을 내는 사람은 빼고 계산
 
-        int returnPenalty = cost / countMember;//벌금 / 같은 팀원의 수
+        int returnPenalty = cost / (countMember-1);//벌금 / 같은 팀원의 수
         List<Apply> anotherApply = applyRepository.findAnotherApply(id, postId);
 
         //여기 벌크연산하는게 나을듯

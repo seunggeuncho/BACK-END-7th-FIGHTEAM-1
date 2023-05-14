@@ -202,7 +202,7 @@ public class TeamspaceService {
                 AttendanceResponseDto attendanceResponseDto = new AttendanceResponseDto();
                 attendanceResponseDto.setUser_id(rs.getLong("user_id"));
                 attendanceResponseDto.setAtt_check(rs.getString("att_check"));
-                return null;
+                return attendanceResponseDto;
             }
         });
         int cost = 0;
@@ -212,10 +212,10 @@ public class TeamspaceService {
             }else if(attend_list.get(i).getAtt_check().equals("absence")){
                 cost = 1500;
             }
-            if(!attend_list.get(i).getAtt_check().equals("absence")){
+            if(!attend_list.get(i).getAtt_check().equals("attend")){
                 Long apply_id = jdbcTemplate.queryForObject(sql_getapply, new Object[]{attend_list.get(i).getUser_id(), teamspace_id}, Long.class);
                 penaltyService.penaltyLogic(apply_id,cost);
-                jdbcTemplate.update(sql, attend_list.get(i).getUser_id(),teamspace_id, attend_list.get(i).getAtt_check(),cost);
+                jdbcTemplate.update(sql_history_insert, attend_list.get(i).getUser_id(),teamspace_id, attend_list.get(i).getAtt_check(),cost);
             }
         }
     }
