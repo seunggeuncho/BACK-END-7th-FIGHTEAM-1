@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <head th:replace="fragments/htmlHeader" >
+    <head th:replace="~{fragments/htmlHeader}" >
     </head>
 <body>
-<div th:replace="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 <div class="container-fluid">
     <div class="row flex-nowrap">
-        <div th:insert="fragments/mypageSide :: sidebar" class="col-3 bd-sidebar"/>
+        <div th:insert="~{fragments/mypageSide :: sidebar}" class="col-3 bd-sidebar"/>
         <!--여기까지가 sidebar -->
         <main class="col-9 py-md-3  bd-content" role="main">
             <div class="bd-cheatsheet container-fluid bg-body">
