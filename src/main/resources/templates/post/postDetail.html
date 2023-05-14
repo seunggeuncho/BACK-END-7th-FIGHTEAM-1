@@ -87,7 +87,18 @@ function openPopup(url, name, width, height) {
       <a class="text-decoration-none link-dark" th:href="@{|/post/update/${board.post_id}|}">수정</a>
     </div>
   </th:block>
-  <h1 class="display-5 font-weight-bold">프로젝트 기본</h1>
+  <div clas="container">
+    <div class="row">
+      <div class="col">
+        <h1 class="display-5 font-weight-bold">프로젝트 기본</h1>
+      </div>
+      <th:block th:if = "${board.complete == '1'}">
+        <div class="col">
+          <h1 class="display-5 font-weight-bold float-right text-danger">마감</h1>
+        </div>
+      </th:block>
+    </div>
+  </div>
   <hr class="mb-5">
   <div id="upper" class="mb-2">
     <div class="row mb-3">

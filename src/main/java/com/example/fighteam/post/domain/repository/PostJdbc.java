@@ -354,6 +354,7 @@ public class PostJdbc implements PostRepository {
                 getPostDetailResponseDto.setDate(rs.getDate("date"));
                 getPostDetailResponseDto.setCount(rs.getInt("count"));
                 getPostDetailResponseDto.setSubject(rs.getString("subject"));
+                getPostDetailResponseDto.setComplete(rs.getString("complete"));
             }
         }catch(Exception e){
             e.printStackTrace();

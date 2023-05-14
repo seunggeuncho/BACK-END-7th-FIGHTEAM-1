@@ -25,4 +25,5 @@ public class GetPostDetailResponseDto {
     private String content;
     private Long user_id;
     private String subject;
+    private String complete;
 }
