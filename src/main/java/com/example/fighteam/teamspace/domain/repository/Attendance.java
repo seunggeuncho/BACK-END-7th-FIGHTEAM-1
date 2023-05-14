@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 public class Attendance {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long calendar_id;
     @Column(nullable = false)
     private long teamspace_id;

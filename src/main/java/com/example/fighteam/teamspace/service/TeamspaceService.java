@@ -35,7 +35,7 @@ public class TeamspaceService {
     }
 
     public List<HistoryDto> getHistory(Long user_id, Long teamspace_id) {
-        String sql = "select ch.user_id , history_date, type, cost, user_deposit from charge_history ch, apply app " +
+        String sql = "select ch.user_id , history_date, type, cost, user_deposit from history ch, apply app " +
                 "where ch.user_id = app.user_id and ch.teamspace_id = ? and ch.user_id = ? order by history_date desc";
         List<HistoryDto> history = jdbcTemplate.query(sql, new Object[]{teamspace_id, user_id}, new RowMapper<HistoryDto>() {
             @Override
@@ -87,8 +87,8 @@ public class TeamspaceService {
                 rowCnt += jdbcTemplate.update(u_sql,att_check[i],attendanceCheckRequestDto.getEtc(),
                         member_id,teamspace_id, attendanceCheckRequestDto.getCalendar_date());
             }else{
-                String i_sql = "insert into attendance(calendar_id, teamspace_id, user_id, calendar_date, att_check, etc, status)" +
-                        "values(nextval(seq_attendance), ?, ?, ? , ?, ?, ?);";
+                String i_sql = "insert into attendance( teamspace_id, user_id, calendar_date, att_check, etc, status)" +
+                        "values( ?, ?, ? , ?, ?, ?);";
                 rowCnt += jdbcTemplate.update(sql,teamspace_id, member_id,attendanceCheckRequestDto.getCalendar_date(),
                         att_check[i],attendanceCheckRequestDto.getEtc(),'N');
             }
@@ -111,7 +111,7 @@ public class TeamspaceService {
     public String CreateTeamspace(String post_id, Long master, Long sub_master,String teamspace_name){
         String delete_sql = "delete from apply where post_id = ? and status = 'false'";
         jdbcTemplate.update(delete_sql,post_id);
-        String insert_sql = "insert into teamspace(teamspace_id, post_id, teamspace_name, master, sub_master) values(nextval('seq_teamspace_id'), ?, ?, ?,?)";
+        String insert_sql = "insert into teamspace( post_id, teamspace_name, master, sub_master) values( ?, ?, ?,?)";
         jdbcTemplate.update(insert_sql, post_id, teamspace_name, master, sub_master);
         String select_sql = "select  teamspace_id from teamspace where post_id = ?";
         String teamspace_id = jdbcTemplate.queryForObject(select_sql, new Object[]{post_id}, String.class);
