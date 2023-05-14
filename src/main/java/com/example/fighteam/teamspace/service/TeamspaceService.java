@@ -1,5 +1,6 @@
 package com.example.fighteam.teamspace.service;
 
+import com.example.fighteam.payment.service.PenaltyService;
 import com.example.fighteam.teamspace.domain.dto.AttendanceCheckRequestDto;
 import com.example.fighteam.teamspace.domain.dto.AttendanceResponseDto;
 import com.example.fighteam.teamspace.domain.dto.HistoryDto;
@@ -25,6 +26,8 @@ public class TeamspaceService {
     private TeamspaceRepository teamspaceRepository;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private PenaltyService penaltyService;
     public void createAttendance(AttendanceCheckRequestDto attendanceCheckRequestDto) {
 
     }
@@ -190,19 +193,31 @@ public class TeamspaceService {
         String teamspace_id = attendanceCheckRequestDto.getTeamspace_id();
         String calendar_date = attendanceCheckRequestDto.getCalendar_date();
         jdbcTemplate.update(sql, teamspace_id, calendar_date, teamspace_id,calendar_date,teamspace_id);
-        String sql2 = "update apply set user_deposit = user_deposit - ? where user_id = ? and teamspace_id = ?";
-//        String sql3 = "insert into history(balance, cost, type, apply_id, user_id) " +
-//                "values((select balance from history h, apply a where h.apply_id = a.apply_id and h.user_id = ? order by date desc limit 1),?,'penalty',(select apply_id from apply where user_id = ? and teamspace_id = ?),?)";
-//        int cost = 0;
-//        for(int i = 0; i < attendanceCheckRequestDto.getUser_id().length; i++){
-//            if(attendanceCheckRequestDto.getAtt_checks()[i].equals("late")){
-//                cost = 1000;
-//            }else if(attendanceCheckRequestDto.getAtt_checks()[i].equals("absence")){
-//                cost = 1500;
-//            }
-//            jdbcTemplate.update(sql2, cost, attendanceCheckRequestDto.getUser_id()[i],attendanceCheckRequestDto.getTeamspace_id());
-//
-//        }
+        String sql4 = "select * from attendance where teamspace_id = ? and FORMATDATETIME(calendar_date, 'yyyy-MM-dd') = ?";
+        String sql_getapply = "select apply_id from apply where user_id = ? and teamspace_id =?";
+        String sql_history_insert = "insert into DEPOSIT_HISTORY(user_id, teamspace_id, history_date, type, cost) values(?,?,current_date(),?,?)";
+        List<AttendanceResponseDto> attend_list = jdbcTemplate.query(sql4, new Object[]{teamspace_id, calendar_date}, new RowMapper<AttendanceResponseDto>() {
+            @Override
+            public AttendanceResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                AttendanceResponseDto attendanceResponseDto = new AttendanceResponseDto();
+                attendanceResponseDto.setUser_id(rs.getLong("user_id"));
+                attendanceResponseDto.setAtt_check(rs.getString("att_check"));
+                return null;
+            }
+        });
+        int cost = 0;
+        for(int i = 0; i < attend_list.size(); i++){
+            if(attend_list.get(i).getAtt_check().equals("late")){
+                cost = 1000;
+            }else if(attend_list.get(i).getAtt_check().equals("absence")){
+                cost = 1500;
+            }
+            if(!attend_list.get(i).getAtt_check().equals("absence")){
+                Long apply_id = jdbcTemplate.queryForObject(sql_getapply, new Object[]{attend_list.get(i).getUser_id(), teamspace_id}, Long.class);
+                penaltyService.penaltyLogic(apply_id,cost);
+                jdbcTemplate.update(sql, attend_list.get(i).getUser_id(),teamspace_id, attend_list.get(i).getAtt_check(),cost);
+            }
+        }
     }
     public List<TeamspaceMyPageResponseDto> myPageTeamspaceList(Long user_id){
         String sql1 = "select status, post_id, teamspace_id from apply where user_id = ?";
