@@ -40,7 +40,7 @@ public class UserController {
     //회원가입
     @RequestMapping(value = "/user/join", method = RequestMethod.POST)
     public String joinUs(User user) {
-        User dup = userRepository.findById(user.getId()).orElse(null);
+        User dup = userRepository.findByEmail(user.getEmail()).orElse(null);
         if(dup != null) return "redirect:/user/join";
         userService.signUp(user);
         return "joinlogin/login";
