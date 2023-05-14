@@ -249,17 +249,17 @@ public class PostJdbc implements PostRepository {
         if (topic.equals("study")){
             sql = "SELECT title, user_id, post_id, enddate, count, subject, deposit FROM ("
                     +" SELECT ROWNUM NUM, N.* FROM ("+
-                    "SELECT *FROM post_table where subject = 'study' and complete = '0' ORDER BY date  DESC) N) "
+                    "SELECT *FROM post_table where subject = 'study' ORDER BY date  DESC) N) "
                     +"WHERE NUM BETWEEN ? AND ?";
         }else if(topic.equals("project")){
             sql = "SELECT title, user_id, post_id, enddate, count, subject, deposit FROM ("
                     +" SELECT ROWNUM NUM, N.* FROM ("+
-                    "SELECT *FROM post_table where subject = 'project' and complete = '0' ORDER BY date  DESC) N) "
+                    "SELECT *FROM post_table where subject = 'project' ORDER BY date  DESC) N) "
                     +"WHERE NUM BETWEEN ? AND ?";
         } else{
             sql = "SELECT title, user_id, post_id, enddate, count, subject, deposit FROM ("
                    +" SELECT ROWNUM NUM, N.* FROM ("+
-                            "SELECT *FROM post_table where complete = '0' ORDER BY date  DESC) N) "
+                            "SELECT *FROM post_table where ORDER BY date  DESC) N) "
             +"WHERE NUM BETWEEN ? AND ?";
         }
         List<GetBoardResponseDto> getBoardResponseDto = new ArrayList<>();
@@ -401,21 +401,21 @@ public class PostJdbc implements PostRepository {
                     "post_id from (select p.post_id post_id ,language_id from post_table p inner " +
                     "join post_language l on p.post_id = l.post_id order by date desc) a  inner join language l " +
                     "on a.language_id = l.language_id) s inner join post_table p on s.post_id = p.post_id" +
-                    " where complete='0' and language_content = ? and subject = 'study') where num between ? and ?";
+                    " where language_content = ? and subject = 'study') where num between ? and ?";
         } else if(topic.equals("project")){
             sql = "select * from (select title, user_id, p.post_id, enddate, count, subject," +
                     " deposit, date, language_content, rownum num from (select language_content, " +
                     "post_id from (select p.post_id post_id ,language_id from post_table p inner " +
                     "join post_language l on p.post_id = l.post_id  order by date desc) a inner join language l " +
                     "on a.language_id = l.language_id) s inner join post_table p on s.post_id = p.post_id" +
-                    " where complete='0' and language_content = ? and subject = 'project') where num between ? and ?";
+                    " where language_content = ? and subject = 'project') where num between ? and ?";
         } else{
             sql = "select * from (select title, user_id, p.post_id, enddate, count, subject," +
                     " deposit, date, language_content, rownum num from (select language_content, " +
                     "post_id from (select p.post_id post_id ,language_id from post_table p inner " +
                     "join post_language l on p.post_id = l.post_id order by date desc) a inner join language l " +
                     "on a.language_id = l.language_id) s inner join post_table p on s.post_id = p.post_id" +
-                    " where complete='0' and language_content = ?) where num between ? and ?";
+                    " where language_content = ?) where num between ? and ?";
         }
         List<GetBoardResponseDto> getBoardResponseDto = new ArrayList<>();
         try{
@@ -454,17 +454,17 @@ public class PostJdbc implements PostRepository {
             sql = "select count(*) count from (select language_content, post_id from " +
                     "(select p.post_id post_id ,language_id from post_table p inner join post_language l" +
                     " on p.post_id = l.post_id) a  inner join language l on a.language_id = l.language_id)" +
-                    " s inner join post_table p on s.post_id = p.post_id where complete='0' and language_content = ? and subject = 'study'";
+                    " s inner join post_table p on s.post_id = p.post_id where language_content = ? and subject = 'study'";
         }else if(topic.equals("project")){
             sql = "select count(*) count from (select language_content, post_id from " +
                     "(select p.post_id post_id ,language_id from post_table p inner join post_language l" +
                     " on p.post_id = l.post_id) a  inner join language l on a.language_id = l.language_id)" +
-                    " s inner join post_table p on s.post_id = p.post_id where complete='0' and language_content = ? and subject = 'project'";
+                    " s inner join post_table p on s.post_id = p.post_id where language_content = ? and subject = 'project'";
         }else{
             sql = "select count(*) count from (select language_content, post_id from " +
                     "(select p.post_id post_id ,language_id from post_table p inner join post_language l" +
                     " on p.post_id = l.post_id) a  inner join language l on a.language_id = l.language_id)" +
-                    " s inner join post_table p on s.post_id = p.post_id where complete='0' and language_content = ?";
+                    " s inner join post_table p on s.post_id = p.post_id where language_content = ?";
         }
         try{
             conn = dataSource.getConnection();

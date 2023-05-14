@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class Teamspace {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long teamspace_id;
     private long post_id;
     private String teamspace_name;
