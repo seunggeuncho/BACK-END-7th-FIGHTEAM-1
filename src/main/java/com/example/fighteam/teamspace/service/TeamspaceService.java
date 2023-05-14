@@ -35,14 +35,14 @@ public class TeamspaceService {
     }
 
     public List<HistoryDto> getHistory(Long user_id, Long teamspace_id) {
-        String sql = "select ch.user_id , history_date, type, cost, user_deposit from history ch, apply app " +
-                "where ch.user_id = app.user_id and ch.teamspace_id = ? and ch.user_id = ? order by history_date desc";
+        String sql = "select ch.user_id , date, type, cost from history ch, apply app " +
+                "where ch.apply_id = app.apply_id and app.teamspace_id = ? and ch.user_id =? and ch.type = 'penalty' order by date desc";
         List<HistoryDto> history = jdbcTemplate.query(sql, new Object[]{teamspace_id, user_id}, new RowMapper<HistoryDto>() {
             @Override
             public HistoryDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 HistoryDto historyDto = new HistoryDto();
-                historyDto.setHistory_date(sdf.format(rs.getTimestamp("history_date")));
+                historyDto.setHistory_date(sdf.format(rs.getTimestamp("date")));
                 historyDto.setCost(rs.getInt("cost"));
                 historyDto.setType(rs.getString("type"));
                 historyDto.setUser_id(rs.getLong("user_id"));

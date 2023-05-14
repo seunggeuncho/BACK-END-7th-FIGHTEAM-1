@@ -4,9 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-
-
-
 @Setter
 @Getter
 public class HistoryDto {
@@ -14,9 +11,11 @@ public class HistoryDto {
     private String history_date;
     private String type;
     private int cost;
+    private int balance;
 
 
-    public HistoryDto(long user_id, String history_date, String type, int cost){
+    public HistoryDto(int balance, long user_id, String history_date, String type, int cost){
+        this.balance = balance;
         this.history_date = history_date;
         this.cost = cost;
         this.type = type;
