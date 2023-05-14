@@ -145,7 +145,7 @@
         <td th:text="${apply.name}"></td>
         <td th:text="${apply.email}"></td>
         <td th:text="${apply.score}"></td>
-        <td th:if="${apply.apply_status == 'confirm'}"><input class="btn btn-danger" type="button" th:onclick="openModal2([[${apply.user_id}]],[[${post_id}]],'deny' )" value="수락 취소"/></td>
+        <td th:if="${apply.apply_status == 'confirm'}"><input class="btn btn-danger" type="button" th:onclick="openModal2([[${apply.name}]],[[${apply.user_id}]],[[${post_id}]],'deny' )" value="수락 취소"/></td>
         <td class="text-warning"th:if="${apply.apply_status == 'master'}">팀장</td>
       </tr>
       </tbody>
