@@ -1,10 +1,18 @@
 package com.example.fighteam.apply.service;
 
 import com.example.fighteam.apply.domain.dto.ApplyResponseDto;
+import com.example.fighteam.payment.domain.Apply;
+import com.example.fighteam.payment.domain.History;
+import com.example.fighteam.payment.domain.HistoryType;
+import com.example.fighteam.payment.repository.ApplyRepository;
+import com.example.fighteam.payment.repository.HistoryRepository;
+import com.example.fighteam.user.domain.repository.User;
+import com.example.fighteam.user.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,13 +22,40 @@ import java.util.List;
 public class ApplyService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private HistoryRepository historyRepository;
+    @Autowired
+    private ApplyRepository applyRepository;
+    @Autowired
+    private UserRepository userRepository;
 
+
+    @Transactional
     public void memberAccept(Long user_id, Long post_id) {
+//        historyRepository.findByMemberId(user_id)
+        Apply findApply = applyRepository.findApplyWithPostAndUser(user_id, post_id);
+        User findApplyUser = findApply.getUser();
+        findApplyUser.plusDeposit(findApply.getUserDeposit());
+        applyRepository.deleteApply(findApply);
+        History findHistory = historyRepository.findHistoryByApplyId(findApplyUser.getId());
+        findHistory.setApply(null);
+
+        History saveHistory = History.builder()
+                .member(findApplyUser)
+                .cost(findApplyUser.getDeposit())
+                .balance(findApplyUser.getDeposit())
+                .type(HistoryType.REFUND)
+                .build();
+        historyRepository.saveHistory(saveHistory);
+
+
         String sql =  "update apply set status = 'confirm' where user_id = ? and post_id = ?";
         jdbcTemplate.update(sql, user_id,post_id);
     }
 
     public void memberDeny(Long user_id, Long post_id) {
+
+
         String sql =  "delete from apply where user_id = ? and post_id = ?";
         jdbcTemplate.update(sql, user_id,post_id);
     }

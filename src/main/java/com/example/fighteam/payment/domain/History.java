@@ -2,6 +2,7 @@ package com.example.fighteam.payment.domain;
 
 import com.example.fighteam.user.domain.repository.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -55,6 +56,7 @@ public class History {
 
     }
 
+    @Builder
     public History(User member,  HistoryType type, int cost,  int balance) {
         this.user = member;
         this.type = type;
