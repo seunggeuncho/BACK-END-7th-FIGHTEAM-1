@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lagn="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head th:replace="fragments/htmlHeader" >
+<head th:replace="~{fragments/htmlHeader}" >
     <meta charset="UTF-8">
     <title>보증금 충전</title>
 
 </head>
 <body>
 
-<div th:replace="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 <div class="container-fluid">
     <div class="row flex-nowrap">
-    <div th:insert="fragments/mypageSide :: sidebar" class="col-3 bd-sidebar"/>
+    <div th:insert="~{fragments/mypageSide :: sidebar}" class="col-3 bd-sidebar"/>
         <!--여기까지가 sidebar -->
 
 
