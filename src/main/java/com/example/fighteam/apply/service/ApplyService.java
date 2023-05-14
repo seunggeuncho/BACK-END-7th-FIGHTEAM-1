@@ -45,7 +45,7 @@ public class ApplyService {
         User findApplyUser = findApply.getUser();
         findApplyUser.plusDeposit(findApply.getUserDeposit());
         applyRepository.deleteApply(findApply);
-        History findHistory = historyRepository.findHistoryByApplyId(findApplyUser.getId());
+        History findHistory = historyRepository.findHistoryByApplyId(findApply.getId());
         findHistory.setApply(null);
 
         History saveHistory = History.builder()
