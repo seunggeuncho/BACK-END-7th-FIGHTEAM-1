@@ -31,7 +31,7 @@ public class TeamspaceRestController {
     public ResponseEntity<List<AttendanceResponseDto>> attendanceEventsClick(@RequestBody Map<String, Object> param){
         String teamspace_id = param.get("teamspace_id").toString();
         String date = param.get("date").toString();
-        String sql = "select * from attendance where teamspace_id = ? and calendar_date = ?";
+        String sql = "select calendar_id, calendar_date, att_check, etc, status, teamspace_id, u.user_id, name from attendance a, users u where u.user_id = a.user_id and teamspace_id = ? and calendar_date = ?";
         List<AttendanceResponseDto> clickEvents = jdbcTemplate.query(sql, new Object[]{teamspace_id,date}, new AttendanceRowMapper());
         String sql2 = "select count(*) from apply where teamspace_id = ? group by teamspace_id";
         AttendanceResponseDto attendanceResponseDto = new AttendanceResponseDto();

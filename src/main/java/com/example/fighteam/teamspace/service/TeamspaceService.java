@@ -35,14 +35,13 @@ public class TeamspaceService {
     }
 
     public List<HistoryDto> getHistory(Long user_id, Long teamspace_id) {
-        String sql = "select ch.user_id , date, type, cost from history ch, apply app " +
-                "where ch.apply_id = app.apply_id and app.teamspace_id = ? and ch.user_id =? and ch.type = 'penalty' order by date desc";
+        String sql = "select * from deposit_history where user_id = ? and teamspace_id = ?";
         List<HistoryDto> history = jdbcTemplate.query(sql, new Object[]{teamspace_id, user_id}, new RowMapper<HistoryDto>() {
             @Override
             public HistoryDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 HistoryDto historyDto = new HistoryDto();
-                historyDto.setHistory_date(sdf.format(rs.getTimestamp("date")));
+                historyDto.setHistory_date(sdf.format(rs.getTimestamp("history_date")));
                 historyDto.setCost(rs.getInt("cost"));
                 historyDto.setType(rs.getString("type"));
                 historyDto.setUser_id(rs.getLong("user_id"));
@@ -58,8 +57,8 @@ public class TeamspaceService {
         return jdbcTemplate.queryForObject(sql, new Object[]{teamspace_id}, String.class);
     }
     public int writeAttendance(AttendanceCheckRequestDto attendanceCheckRequestDto,String user_id){
-        String sql = "insert into attendance(calendar_id, teamspace_id, user_id, calendar_date, att_check, etc, status)" +
-                "values(nextval('SEQ_ATTENDANCE'), ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into attendance( teamspace_id, user_id, calendar_date, att_check, etc, status)" +
+                "values(?, ?, ?, ?, ?, ?)";
         Long teamspace_id = Long.parseLong(attendanceCheckRequestDto.getTeamspace_id());
         String[] users_id = attendanceCheckRequestDto.getUser_id();
         int rowCnt = 0;
@@ -67,8 +66,8 @@ public class TeamspaceService {
             rowCnt += jdbcTemplate.update(sql,teamspace_id, users_id[i],attendanceCheckRequestDto.getCalendar_date(),
                     attendanceCheckRequestDto.getAtt_checks()[i],attendanceCheckRequestDto.getEtc(),"unconfirm");
         }
-        String vote_sql = "insert into att_vote(vote_id, teamspace_id, user_id, calendar_date, vote) " +
-                "values(nextval('seq_vote_id'), ?,?,?,'agree')";
+        String vote_sql = "insert into att_vote( teamspace_id, user_id, calendar_date, vote) " +
+                "values( ?,?,?,'agree')";
         jdbcTemplate.update(vote_sql, attendanceCheckRequestDto.getTeamspace_id(),user_id,attendanceCheckRequestDto.getCalendar_date());
         return rowCnt;
     }
@@ -173,8 +172,8 @@ public class TeamspaceService {
         return list;
     }
     public int writeReview(Long teamspace_id, Long user_rvr, Long user_rvd, int q1,int q2, int q3, int q4, int q5){
-        String sql = "insert into review(review_id,user_rvr, user_rvd, teamspace_id, q1,q2,q3,q4,q5) " +
-                "values(nextval('seq_review_id'), ?,?,?,?,?,?,?,?)";
+        String sql = "insert into review(user_rvr, user_rvd, teamspace_id, q1,q2,q3,q4,q5) " +
+                "values( ?,?,?,?,?,?,?,?)";
         String sql2 = "update users set score = score + ? where user_id = ?";
         int rowCnt = jdbcTemplate.update(sql,user_rvr,user_rvd,teamspace_id,q1,q2,q3,q4,q5);
         jdbcTemplate.update(sql2,(q1+q2+q3+q4+q5)/5);
@@ -182,7 +181,7 @@ public class TeamspaceService {
     }
 
     public int attVote(AttendanceCheckRequestDto attendanceCheckRequestDto){
-        String sql = "insert into att_vote(vote_id, teamspace_id, user_id, calendar_date, vote) values(nextval('seq_vote_id'), ?,?,?,'agree')";
+        String sql = "insert into att_vote(teamspace_id, user_id, calendar_date, vote) values( ?,?,?,'agree')";
         return jdbcTemplate.update(sql,attendanceCheckRequestDto.getTeamspace_id(),attendanceCheckRequestDto.getWriter(),attendanceCheckRequestDto.getCalendar_date());
     }
 
@@ -191,6 +190,19 @@ public class TeamspaceService {
         String teamspace_id = attendanceCheckRequestDto.getTeamspace_id();
         String calendar_date = attendanceCheckRequestDto.getCalendar_date();
         jdbcTemplate.update(sql, teamspace_id, calendar_date, teamspace_id,calendar_date,teamspace_id);
+        String sql2 = "update apply set user_deposit = user_deposit - ? where user_id = ? and teamspace_id = ?";
+//        String sql3 = "insert into history(balance, cost, type, apply_id, user_id) " +
+//                "values((select balance from history h, apply a where h.apply_id = a.apply_id and h.user_id = ? order by date desc limit 1),?,'penalty',(select apply_id from apply where user_id = ? and teamspace_id = ?),?)";
+//        int cost = 0;
+//        for(int i = 0; i < attendanceCheckRequestDto.getUser_id().length; i++){
+//            if(attendanceCheckRequestDto.getAtt_checks()[i].equals("late")){
+//                cost = 1000;
+//            }else if(attendanceCheckRequestDto.getAtt_checks()[i].equals("absence")){
+//                cost = 1500;
+//            }
+//            jdbcTemplate.update(sql2, cost, attendanceCheckRequestDto.getUser_id()[i],attendanceCheckRequestDto.getTeamspace_id());
+//
+//        }
     }
     public List<TeamspaceMyPageResponseDto> myPageTeamspaceList(Long user_id){
         String sql1 = "select status, post_id, teamspace_id from apply where user_id = ?";
