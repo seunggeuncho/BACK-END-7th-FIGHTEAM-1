@@ -75,7 +75,20 @@
 
 
 </form>
+<script>
+    function check_pw() {
 
+        if (document.getElementById('passwd').value != '' && document.getElementById('passwd2').value != '') {
+            if (document.getElementById('passwd').value == document.getElementById('passwd2').value) {
+                document.getElementById('check').innerHTML = '비밀번호가 일치합니다.'
+                document.getElementById('check').style.color = 'black';
+            } else {
+                document.getElementById('check').innerHTML = '비밀번호가 일치하지 않습니다.';
+                document.getElementById('check').style.color = 'red';
+            }
+        }
+    }
+</script>
 
 
 </body>

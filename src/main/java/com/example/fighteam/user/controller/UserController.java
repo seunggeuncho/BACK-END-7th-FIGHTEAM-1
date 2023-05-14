@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class UserController {
 
-
+    private final UserRepository userRepository;
     public final UserService userService;
 
 
@@ -31,13 +31,17 @@ public class UserController {
     }
 
     @GetMapping("/user/edit")
-    public String editUserForm() {
+    public String editUserForm(Model model, HttpSession session) {
+        model.addAttribute("userScore", userRepository.findById((Long) session.getAttribute("loginId")).get().getScore());
         return "joinlogin/userEdit";
     }
+
 
     //회원가입
     @RequestMapping(value = "/user/join", method = RequestMethod.POST)
     public String joinUs(User user) {
+        User dup = userRepository.findById(user.getId()).orElse(null);
+        if(dup != null) return "redirect:/user/join";
         userService.signUp(user);
         return "joinlogin/login";
     }
@@ -60,16 +64,16 @@ public class UserController {
         return "redirect:/post/home";
     }
 
+
     //회원정보수정
     @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
-    public String editUser(User member,Model model) {
-        User user = userService.editUser(member.getEmail());
+    public String editUser(@RequestParam("passwd") String password,@RequestParam("tel") String userTel,HttpSession session,Model model) {
+        User user = userRepository.findById((Long) session.getAttribute("loginId")).get();
+        user.setPasswd(password);
+        user.setTel(userTel);
+        userRepository.save(user);
 
-        System.out.println(user.getEmail());
-        model.addAttribute("email", user.getEmail());
-
-
-        return "joinlogin/userEdit";
+        return "redirect:/user/edit";
     }
 
     //로그아웃

@@ -36,11 +36,5 @@ public class UserService {
 
     }
 
-    public User editUser(String email){
-         User user = userRepository.editUserInfo(email);
-         return user;
-    }
-
-
 }
 
