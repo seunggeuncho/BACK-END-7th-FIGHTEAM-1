@@ -16,6 +16,7 @@ public class ApplyRepository {
     public Apply save(Apply apply) {
         em.persist(apply);
         return apply;
+
     }
 
     public Apply findOne(Long id) {
@@ -23,13 +24,13 @@ public class ApplyRepository {
     }
 
     public int findCountByPostId(Long id) {
-        Long singleResult = em.createQuery("select count(a) from Apply a where a.post.id =:id and a.status = true", Long.class)
+        Long singleResult = em.createQuery("select count(a) from Apply a where a.post.id =:id and a.status = 'true'", Long.class)
                 .setParameter("id", id)
                 .getSingleResult();
         return singleResult.intValue();
     }
     public Apply findByMember(Long id) {
-        return em.createQuery("select a from Apply a where a.member.id = :id", Apply.class)
+        return em.createQuery("select a from Apply a where a.user.id = :id", Apply.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }
@@ -37,16 +38,31 @@ public class ApplyRepository {
     public Apply findByMemberWithPost(Long id) {
         return em.createQuery("select a from Apply a " +
                 " join fetch a.post p " +
-                " join fetch a.member m where m.id =:id", Apply.class)
+                " join fetch a.user m where m.id =:id", Apply.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }
 
     public List<Apply> findAnotherApply(Long memberId, Long postId) {
-        return em.createQuery("select a from Apply a where a.member.id != :id and a.status = true and a.post.id =: postId ", Apply.class)
+        return em.createQuery("select a from Apply a where a.user.id != :id and a.status = 'true' and a.post.id =: postId ", Apply.class)
                 .setParameter("id", memberId)
                 .setParameter("postId", postId)
                 .getResultList();
 
+    }
+
+    public Apply findApplyWithPostAndUser(Long userId, Long postId) {
+        return em.createQuery("select a from Apply a where a.user.id = :userId and a.post.id = :postId ", Apply.class)
+                .setParameter("userId",userId)
+                .setParameter("postId", postId)
+                .getSingleResult();
+
+
+
+    }
+
+    public Apply deleteApply(Apply apply) {
+        em.remove(apply);
+        return apply;
     }
 }
