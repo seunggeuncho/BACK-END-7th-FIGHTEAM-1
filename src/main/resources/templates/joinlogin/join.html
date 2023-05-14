@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
@@ -56,36 +56,40 @@
 </head>
 
 <body>
-
 <div th:replace="fragments/header :: header" ></div>
 
 <form action="/user/join" method="post">
     <h2>회원가입</h2>
     <div>
         <label for="email"><b>이메일(ID):</b> </label>
-        <input id="email" name="email" type="text" class="input" placeholder="이메일을 입력하세요.">
+        <input id="email" name="email" type="text" class="input" placeholder="이메일을 입력하세요."
+        th:value="${user.email}">
     </div>
     <div>
         <label for="passwd"><b>비밀번호:</b> </label>
-        <input id="passwd" name="passwd" type="password" class="input" onchange="check_pw()" placeholder="비밀번호를 입력하세요.">
+        <input id="passwd" name="passwd" type="password" class="input" onchange="check_pw()" placeholder="비밀번호를 입력하세요."
+               th:value="${user.passwd}">
     </div>
     <div>
         <label for="passwd"><b>비밀번호 확인:</b> </label>
         <input id="passwd2" name="passwd2" type="password" class="input" onchange="check_pw()"
-               placeholder="비밀번호를 한번 더 입력하세요.">
+               placeholder="비밀번호를 한번 더 입력하세요." th:value="${user.passwd}">
         <span id="check"></span>
     </div>
     <div>
         <label for="name"><b>이름:</b> </label>
-        <input id="name" name="name" type="name" class="input" placeholder="이름을 입력하세요.">
+        <input id="name" name="name" type="name" class="input" placeholder="이름을 입력하세요."
+               th:value="${user.name}">
     </div>
     <div>
         <label for="tel"><b>전화번호:</b> </label>
-        <input id="tel" name="tel" type="tel" class="input" placeholder="전화번호를 입력하세요.">
+        <input id="tel" name="tel" type="tel" class="input" placeholder="전화번호를 입력하세요."
+               th:value="${user.tel}">
     </div>
     <input type="submit" value="가입하기" class="btn btn-danger ">
 </form>
 <script>
+
     function check_pw() {
 
         if (document.getElementById('passwd').value != '' && document.getElementById('passwd2').value != '') {
@@ -100,4 +104,9 @@
     }
 </script>
 </body>
+<script th:inline="javascript">
+    if([[${user.email}]] != null){
+    alert('이미 있는 아이디입니다.');
+    }
+</script>
 </html>

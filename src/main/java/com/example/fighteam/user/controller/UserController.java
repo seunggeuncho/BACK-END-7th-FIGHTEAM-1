@@ -26,7 +26,9 @@ public class UserController {
     }
 
     @GetMapping("/user/join")
-    public String createUserForm() {
+    public String createUserForm(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
         return "joinlogin/join";
     }
 
@@ -39,9 +41,12 @@ public class UserController {
 
     //회원가입
     @RequestMapping(value = "/user/join", method = RequestMethod.POST)
-    public String joinUs(User user) {
+    public String joinUs(User user, Model model) {
         User dup = userRepository.findByEmail(user.getEmail()).orElse(null);
-        if(dup != null) return "redirect:/user/join";
+        if(dup != null){
+            model.addAttribute("user", user);
+            return "joinlogin/join";
+        }
         userService.signUp(user);
         return "joinlogin/login";
     }
