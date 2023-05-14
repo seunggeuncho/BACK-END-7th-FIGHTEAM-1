@@ -24,9 +24,9 @@
     function closeModal() {
         document.getElementById("modal").style.display = "none";
     }
-    function openModal2(user_id, post_id, control) {
+    function openModal2(name, user_id, post_id, control) {
       if(control == 'deny'){
-        document.getElementById("modal2h6").innerHTML = user_id+"님의 신청을 거절/취소 하시겠습니까?";
+        document.getElementById("modal2h6").innerHTML = name+"님의 신청을 거절/취소 하시겠습니까?";
         document.getElementById("modal2_form").action = "/DenyApply";
         document.getElementById("modal2_post_id").value = post_id;
         document.getElementById("modal2_user_id").value = user_id;
@@ -122,8 +122,8 @@
             <button class="btn btn-success" type="submit">채팅하기</button>
           </form>
         </td>
-        <td><input type="button" class="btn btn-primary" th:onclick="openModal2([[${apply.name}]],[[${post_id}]],'accept' )" value="수락"/></td>
-        <td><input type="button" class="btn btn-danger" th:onclick="openModal2([[${apply.name}]],[[${post_id}]],'deny' )" value="거절"/></td>
+        <td><input type="button" class="btn btn-primary" th:onclick="openModal2([[${apply.name}]],[[${apply.user_id}]],[[${post_id}]],'accept' )" value="수락"/></td>
+        <td><input type="button" class="btn btn-danger" th:onclick="openModal2([[${apply.name}]],[[${apply.user_id}]],[[${post_id}]],'deny' )" value="거절"/></td>
       </tr>
       </tbody>
     </table>
