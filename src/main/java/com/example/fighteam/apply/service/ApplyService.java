@@ -8,6 +8,7 @@ import com.example.fighteam.payment.repository.ApplyRepository;
 import com.example.fighteam.payment.repository.HistoryRepository;
 import com.example.fighteam.user.domain.repository.User;
 import com.example.fighteam.user.domain.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -29,15 +30,25 @@ public class ApplyService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    EntityManager em;
 
     @Transactional
     public void memberAccept(Long user_id, Long post_id) {
+
+
+
+        String sql =  "update apply set status = 'confirm' where user_id = ? and post_id = ?";
+        jdbcTemplate.update(sql, user_id,post_id);
+    }
+    @Transactional
+    public void memberDeny(Long user_id, Long post_id) {
 //        historyRepository.findByMemberId(user_id)
         Apply findApply = applyRepository.findApplyWithPostAndUser(user_id, post_id);
         User findApplyUser = findApply.getUser();
         findApplyUser.plusDeposit(findApply.getUserDeposit());
         applyRepository.deleteApply(findApply);
-        History findHistory = historyRepository.findHistoryByApplyId(findApplyUser.getId());
+        History findHistory = historyRepository.findHistoryByApplyId(findApply.getId());
         findHistory.setApply(null);
 
         History saveHistory = History.builder()
@@ -47,14 +58,8 @@ public class ApplyService {
                 .type(HistoryType.REFUND)
                 .build();
         historyRepository.saveHistory(saveHistory);
-
-
-        String sql =  "update apply set status = 'confirm' where user_id = ? and post_id = ?";
-        jdbcTemplate.update(sql, user_id,post_id);
-    }
-
-    public void memberDeny(Long user_id, Long post_id) {
-
+        em.flush();
+        em.clear();
 
         String sql =  "delete from apply where user_id = ? and post_id = ?";
         jdbcTemplate.update(sql, user_id,post_id);
