@@ -54,7 +54,7 @@ public class TeamspaceService {
     }
 
     public String getTeamspaceName(Long teamspace_id, String by){
-        String sql = "select teamspace_name from team_space where teamspace_id=?";
+        String sql = "select teamspace_name from teamspace where teamspace_id=?";
         return jdbcTemplate.queryForObject(sql, new Object[]{teamspace_id}, String.class);
     }
     public int writeAttendance(AttendanceCheckRequestDto attendanceCheckRequestDto,String user_id){
@@ -111,9 +111,9 @@ public class TeamspaceService {
     public String CreateTeamspace(String post_id, Long master, Long sub_master,String teamspace_name){
         String delete_sql = "delete from apply where post_id = ? and status = 'false'";
         jdbcTemplate.update(delete_sql,post_id);
-        String insert_sql = "insert into team_space(teamspace_id, post_id, teamspace_name, master, sub_master) values(nextval('seq_teamspace_id'), ?, ?, ?,?)";
+        String insert_sql = "insert into teamspace(teamspace_id, post_id, teamspace_name, master, sub_master) values(nextval('seq_teamspace_id'), ?, ?, ?,?)";
         jdbcTemplate.update(insert_sql, post_id, teamspace_name, master, sub_master);
-        String select_sql = "select  teamspace_id from team_space where post_id = ?";
+        String select_sql = "select  teamspace_id from teamspace where post_id = ?";
         String teamspace_id = jdbcTemplate.queryForObject(select_sql, new Object[]{post_id}, String.class);
         String update_sql = "update apply set teamspace_id = ? where post_id = ?";
         jdbcTemplate.update(update_sql,teamspace_id,post_id);
@@ -213,7 +213,7 @@ public class TeamspaceService {
         return team_list;
     }
     public String getTeamspaceStatus(Long teamspace_id){
-        String sql = "select teamspace_status from team_space where teamspace_id = ?";
+        String sql = "select teamspace_status from teamspace where teamspace_id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{teamspace_id}, String.class);
     }
     public Long getMasterFromApply(String post_id){
@@ -221,7 +221,7 @@ public class TeamspaceService {
         return jdbcTemplate.queryForObject(sql,new Object[]{post_id}, Long.class);
     }
     public boolean TeamspaceIsExistByPost(String post_id){
-        String sql = "select teamspace_id from team_space where post_id = ?";
+        String sql = "select teamspace_id from teamspace where post_id = ?";
         String tsid = null;
         try{
             tsid = jdbcTemplate.queryForObject(sql, new Object[]{post_id}, String.class);
