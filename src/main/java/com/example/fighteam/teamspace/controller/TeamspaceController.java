@@ -93,7 +93,7 @@ public class TeamspaceController {
                     Long master = teamspaceService.getMasterFromApply(post_id);
                     String teamspace_id = teamspaceService.CreateTeamspace(post_id,master,sub_master,teamspace_name);
                     teamspaceService.AppointSub(sub_master,post_id);
-//                    postService.completepost(post_id);
+                    postService.completepost(Long.valueOf(post_id));
                     url = "redirect:/attendanceMain?teamspace_id="+teamspace_id;
                 }else{
                     url = "redirect:/TeamspaceErrorManager?error_code=et";//exist teamspace
