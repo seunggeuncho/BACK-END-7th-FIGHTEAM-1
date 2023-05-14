@@ -32,6 +32,14 @@ public class ApplyService {
 
     @Transactional
     public void memberAccept(Long user_id, Long post_id) {
+
+
+
+        String sql =  "update apply set status = 'confirm' where user_id = ? and post_id = ?";
+        jdbcTemplate.update(sql, user_id,post_id);
+    }
+
+    public void memberDeny(Long user_id, Long post_id) {
 //        historyRepository.findByMemberId(user_id)
         Apply findApply = applyRepository.findApplyWithPostAndUser(user_id, post_id);
         User findApplyUser = findApply.getUser();
@@ -47,14 +55,6 @@ public class ApplyService {
                 .type(HistoryType.REFUND)
                 .build();
         historyRepository.saveHistory(saveHistory);
-
-
-        String sql =  "update apply set status = 'confirm' where user_id = ? and post_id = ?";
-        jdbcTemplate.update(sql, user_id,post_id);
-    }
-
-    public void memberDeny(Long user_id, Long post_id) {
-
 
         String sql =  "delete from apply where user_id = ? and post_id = ?";
         jdbcTemplate.update(sql, user_id,post_id);
