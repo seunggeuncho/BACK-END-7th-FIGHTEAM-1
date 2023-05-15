@@ -67,6 +67,13 @@ public class ApplyRepository {
                 .getResultList();
     }
 
+    public Apply findApplyWithPostAndUser(Long applyId) {
+        return em.createQuery("select a from Apply a join fetch a.user u join fetch a.post p where a.id = :applyId", Apply.class)
+                .setParameter("applyId", applyId)
+                .getSingleResult();
+
+    }
+
     public Apply deleteApply(Apply apply) {
         em.remove(apply);
         return apply;
