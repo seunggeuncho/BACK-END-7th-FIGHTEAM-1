@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.6/index.global.min.js'></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <script>
+    function acceptApply(user_id, post_id){
+      sessionStorage.setItem('apply_user_id', user_id);
+      sessionStorage.setItem('apply_post_id', post_id);
+      window.location.href =  "http://localhost:8080/AcceptApply";
+    }
+    function denyApply(user_id, post_id){
+      sessionStorage.setItem('apply_user_id', user_id);
+      sessionStorage.setItem('apply_post_id', post_id);
+      window.location.href =  "http://localhost:8080/DenyApply";
+    }
+    function openModal(post_id) {
+        document.getElementById("modal").style.display = "block";
+        document.getElementById("param_post_id").value = post_id;
+    }
+    function closeModal() {
+        document.getElementById("modal").style.display = "none";
+    }
+    function openModal2(name, user_id, post_id, control) {
+      if(control == 'deny'){
+        document.getElementById("modal2h6").innerHTML = name+"님의 신청을 거절/취소 하시겠습니까?";
+        document.getElementById("modal2_form").action = "/DenyApply";
+        document.getElementById("modal2_post_id").value = post_id;
+        document.getElementById("modal2_user_id").value = user_id;
+        document.getElementById("modal2_post_id").type = "hidden";
+        document.getElementById("modal2_user_id").type = "hidden";
+      }else if(control == 'accept'){
+        document.getElementById("modal2h6").innerHTML = name+"님의 신청을 수락 하시겠습니까?";
+        document.getElementById("modal2_form").action = "/AcceptApply";
+        document.getElementById("modal2_post_id").value = post_id;
+        document.getElementById("modal2_user_id").value = user_id;
+        document.getElementById("modal2_post_id").type = "hidden";
+        document.getElementById("modal2_user_id").type = "hidden";
+      }
+      document.getElementById("modal2").style.display = "block";
+    }
+    function closeModal2() {
+      document.getElementById("modal2").style.display = "none";
+    }
+  </script>
+  <style>
+    #applier_table{
+      width: 700px;
+      height: 600px;
+    }
+    #applier_list{
+      width: 700px;
+      height: 700px;
+      overflow: auto;
+    }
+    #member_container{
+      position: fixed;
+      right: 5%;
+      top: 15%;
+    }
+    #member_table{
+      width:700px;
+      height: 700px;
+      overflow: auto;
+    }
+    th{
+      width: 130px;
+    }
+    #modal,#modal2 {
+			display: none;
+			z-index: 1;
+			position: fixed;
+            top: 0;
+            left: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+		.bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+  </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header" ></div>
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <div th:insert="fragments/mypageSide :: sidebar" class="col-2 bd-sidebar"/>
+    <main class="col-9 py-md-3  bd-content" role="main">
+<div id="applier_container">
+  <input type="hidden" th:value="${post_id}" id="hidden_post_id"/>
+  <h2>신청자 리스트</h2>
+  <div id="applier_list">
+    <table class="table" id="applier_table">
+      <thead>
+      <th scope="col">이름</th>
+      <th scope="col">평점</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      </thead>
+      <tbody th:if="${not #lists.isEmpty(applyList)}">
+      <tr th:each="apply : ${applyList}" th:if="${apply.apply_status == 'false'}">
+        <td th:text="${apply.name}"></td>
+        <td th:text="${apply.score}"></td>
+        <td>
+          <form method="post" action="/chat/creating">
+            <input type="hidden" name="postUser" th:value="${apply.user_id}">
+            <button class="btn btn-success" type="submit">채팅하기</button>
+          </form>
+        </td>
+        <td><input type="button" class="btn btn-primary" th:onclick="openModal2([[${apply.name}]],[[${apply.user_id}]],[[${post_id}]],'accept' )" value="수락"/></td>
+        <td><input type="button" class="btn btn-danger" th:onclick="openModal2([[${apply.name}]],[[${apply.user_id}]],[[${post_id}]],'deny' )" value="거절"/></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div id="member_container">
+  <h2>신청 수락 리스트</h2>
+  <div id="member_table">
+    <table class="table">
+      <thead>
+      <th scope="col">이름</th>
+      <th scope="col">이메일</th>
+      <th scope="col">평점</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      </thead>
+      <tbody th:if="${not #lists.isEmpty(applyList)}">
+      <tr th:each="apply : ${applyList}" th:if="${apply.apply_status != 'false'}">
+        <td th:text="${apply.name}"></td>
+        <td th:text="${apply.email}"></td>
+        <td th:text="${apply.score}"></td>
+        <td th:if="${apply.apply_status == 'confirm'}"><input class="btn btn-danger" type="button" th:onclick="openModal2([[${apply.name}]],[[${apply.user_id}]],[[${post_id}]],'deny' )" value="수락 취소"/></td>
+        <td class="text-warning"th:if="${apply.apply_status == 'master'}">팀장</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <button th:onclick="openModal([[${post_id}]])" class="btn btn-primary">팀 스페이스생성</button>
+</div>
+<div id="modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">알림</h5>
+        <button type="button" class="btn-close" onclick="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="get" action="/CreateTeamspacePro" >
+          <h6>정말 팀원을 확정하고 팀스페이스를 생성하시겠습니까?</h6>
+          <input type="text" name="teamspace_name" class="form-control" placeholder="TeamspaceName" aria-label="TeamspaceName" aria-describedby="basic-addon1">
+          <table class="table">
+            <thead>
+            <th scope="col">이름</th>
+            <th scope="col">이메일</th>
+            <th scope="col">평점</th>
+            <th scope="col">부팀장 선택</th>
+            </thead>
+            <tbody th:if="${not #lists.isEmpty(applyList)}">
+            <tr th:each="apply : ${applyList}" th:if="${apply.apply_status != 'false'}">
+              <td th:text="${apply.name}"></td>
+              <td th:text="${apply.email}"></td>
+              <td th:text="${apply.score}"></td>
+              <td th:if="${apply.apply_status == 'confirm'}"><input type="radio" name="sub_master" th:value="${apply.user_id}"/> </td>
+              <td class="text-warning"th:if="${apply.apply_status == 'master'}">팀장</td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="modal-footer">
+            <button type="button" onclick="closeModal()" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+
+            <input type="hidden" id="param_post_id" name="post_id">
+
+            <input type="submit" class="btn btn-primary"value="생성하기">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+    </main>
+  </div>
+</div>
+</div>
+
+<div id="modal2" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">알림</h5>
+        <button type="button" class="btn-close" onclick="closeModal2()" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h6 id="modal2h6"></h6>
+        <div class="modal-footer">
+          <form method="post" action="/CreateTeamspacePro" id="modal2_form">
+            <input type="hidden" id="modal2_post_id" name="post_id"/>
+            <input tpye="hidden" id="modal2_user_id" name="user_id"/>
+            <input type="submit" class="btn btn-primary"value="네"/>
+          </form>
+          <button type="button" onclick="closeModal2()" class="btn btn-secondary" data-bs-dismiss="modal">아니오</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+table{
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+label{
+
+
+}
+#main{
+    right:250px;
+    position: relative;
+    font-weight: bolder
+}
+#main2{
+    right:300px;
+    position: relative;
+}
+body {
+    margin: 0;
+}
+* {
+    box-sizing: border-box;
+}
+
+/* Style the top navigation bar */
+.topnav {
+    overflow: hidden;
+    background-color: #333;
+}
+
+/* Style the topnav links */
+#navs {
+    display: block;
+    color: white;
+    background-color: #333;
+    text-align: center;
+    padding: 20px 50px;
+    text-decoration: none;
+    border: none;
+}
+
+.left{
+    float:left;
+}
+.right{
+    float:right;
+}
+
+
+.topnav #navs:hover {
+    background-color: #ddd;
+    color: black;
+}

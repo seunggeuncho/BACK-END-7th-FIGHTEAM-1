@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>보증금 충전</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function submitJson() {
+            var charge = $('select[name="charge-amount"]').val();
+            console.log(charge)
+            var json = {
+                "charge" : charge
+            };
+            console.log(json);
+            $.ajax({
+                type: "POST",
+                url: "/charge/pay",
+                data: JSON.stringify(json),
+                contentType: "application/json",
+                success: function(response) {
+                    location.href = response.next_redirect_pc_url;
+                },
+                error: function() {
+                    alert("충전에 실패했습니다.");
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<h1>보증금 충전</h1>
+
+<form th:action="@{/charge/submit}" method="post">
+    <label for="payment-method">결제 수단 선택:</label>
+    <select name="payment-method" id="payment-method">
+        <option value="credit-card">카카오페이</option>
+        <option value="bank-transfer">계좌이체</option>
+        <option value="paypal">페이팔</option>
+    </select><br><br>
+    <label for="charge-amount">충전 금액 선택:</label>
+    <select name="charge-amount" id="charge-amount">
+        <option value="10000">10,000원</option>
+        <option value="20000">20,000원</option>
+        <option value="50000">50,000원</option>
+        <option value="100000">100,000원</option>
+    </select><br><br>
+    <label for="balance">잔액:</label>
+    <span th:field="*{balance}" id="balance" th:text="${balance} + '원'" ></span><br><br>
+    <button type="submit">결제하기</button>
+    <button type="button" onclick="submitJson()">카카오페이 결제(JSON)</button>
+
+</form>
+
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+insert into type  values(1, 'backend');
+insert into type values(2,'frontend');
+insert into type  values(3,'designer');
+insert into type  values(4,'ios');
+insert into type values(5,'android');
+insert into type values(6,'pm');
+insert into type  values(7, '전체');
+
+insert into language  values(1,'javascript');
+insert into language values(2,'nodejs');
+insert into language values(3,'java');
+insert into language values(4,'typescript');
+insert into language values(5,'react');
+insert into language values(6,'vue');
+insert into language values(7,'go');
+insert into language values(8,'spring');
+insert into language values(9,'nextjs');
+insert into language values(10, 'nestjs');
+insert into language  values(11,'express');
+insert into language values(12,'c');
+insert into language values(13,'python');
+insert into language  values(14,'swift');
+insert into language values(15,'kotlin');
+insert into language values(16,'django');

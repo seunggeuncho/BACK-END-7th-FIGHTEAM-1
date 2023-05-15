@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.6/index.global.min.js'></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <script>
+        function selectUser(user_id,teamspace_id){
+            document.getElementById("user_id").value=user_id;
+            document.getElementById("teamspace_id").value=teamspace_id;
+            document.getElementsByName("review_q1").checked=false;
+            document.getElementById("modal").style.display='block';
+        }
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+
+    </script>
+    <style>
+        #col_id,#col_position{
+            width: 15%;
+        }
+        #col_score,#col_button{
+            width: 10%;
+        }
+        #modal {
+			display: none;
+			z-index: 1;
+			position: fixed;
+            top: 0;
+            left: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+        #teammate_list_container{
+          max-height: 600px;
+          overflow: auto;
+        }
+        #review_list{
+
+           max-height: 700px;
+           overflow: auto;
+        }
+        #modal_content{
+            width: 700px;
+        }
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header" ></div>
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div th:insert="fragments/mypageSide :: sidebar" class="col-2 bd-sidebar"/>
+        <main class="col-9 py-md-3  bd-content" role="main">
+<div id="teammate_list_container">
+    <table class="table">
+        <h2>팀원 리스트</h2>
+        <thead>
+        <th class="col" id="col_id">이름</th>
+        <th class="col" id="col_position">직책</th>
+        <th class="col" id="col_score">평점</th>
+        <th class="col" id="col_button"></th>
+        </thead>
+        <tbody th:if="${not #lists.isEmpty(applyList)}">
+        <tr th:each="apply : ${applyList}">
+            <td th:text="${apply.name}"></td>
+            <td th:if="${apply.apply_status == 'confirm'}">팀원</td>
+            <td th:if="${apply.apply_status == 'master'}">팀장</td>
+            <td th:if="${apply.apply_status == 'sub_master'}">부팀장</td>
+            <td th:text="${apply.score}"></td>
+            <td th:if="${not rvd_list.contains(apply.user_id) and apply.user_id != user_id}"><input type="button" class="btn btn-primary" th:onclick="selectUser([[${apply.user_id}]],[[${teamspace_id}]])" value="리뷰 작성하기"/></td>
+            <td th:if="${apply.user_id == user_id}">본인</td>
+            <td th:if="${rvd_list.contains(apply.user_id)}">작성완료</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div id="modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" id="modal_content">
+            <div class="modal-header">
+                <h5 class="modal-title">팀원 평가</h5>
+                <button type="button" class="btn-close" onclick="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="review_form" action="/ReviewWrite" method="post">
+                <div id="review_list">
+                    <div id="review_form_container" >
+                        <h2 id="form_title"></h2>
+                        <input type="hidden" id="user_id" name="user_id" value=""/>
+                        <input type="hidden" id="teamspace_id" name="teamspace_id" value="" />
+                        <p>적극적으로 참여하였나요?</p>
+                        <input type="radio" name="review_q1" id="review_q1_1" value="-10"/>
+                        <label for="review_q1_1">전혀 동의하지 않음</label>
+                        <input type="radio" name="review_q1" id="review_q1_2" value="-5"/>
+                        <label for="review_q1_2">동의하지 않음</label>
+                        <input type="radio" name="review_q1" id="review_q1_3" value="0"/>
+                        <label for="review_q1_3">보통</label>
+                        <input type="radio" name="review_q1" id="review_q1_4" value="5"/>
+                        <label for="review_q1_4">동의함</label>
+                        <input type="radio" name="review_q1" id="review_q1_5" value="10"/>
+                        <label for="review_q1_5">매우 동의함</label>
+                        <br><br>
+                        <p>맡은 역할을 충실히 이행했나요?</p>
+                        <input type="radio" name="review_q2" id="review_q2_1" value="-10"/>
+                        <label for="review_q2_1">전혀 동의하지 않음</label>
+                        <input type="radio" name="review_q2" id="review_q2_2" value="-5"/>
+                        <label for="review_q2_2">동의하지 않음</label>
+                        <input type="radio" name="review_q2" id="review_q2_3" value="0"/>
+                        <label for="review_q2_3">보통</label>
+                        <input type="radio" name="review_q2" id="review_q2_4" value="5"/>
+                        <label for="review_q2_4">동의함</label>
+                        <input type="radio" name="review_q2" id="review_q2_5" value="10"/>
+                        <label for="review_q2_5">매우 동의함</label>
+                        <br><br>
+                        <p>원활한 커뮤니케이션이 가능했나요?</p>
+                        <input type="radio" name="review_q3" id="review_q3_1" value="-10"/>
+                        <label for="review_q3_1">전혀 동의하지 않음</label>
+                        <input type="radio" name="review_q3" id="review_q3_2" value="-5"/>
+                        <label for="review_q3_2">동의하지 않음</label>
+                        <input type="radio" name="review_q3" id="review_q3_3" value="0"/>
+                        <label for="review_q3_3">보통</label>
+                        <input type="radio" name="review_q3" id="review_q3_4" value="5"/>
+                        <label for="review_q3_4">동의함</label>
+                        <input type="radio" name="review_q3" id="review_q3_5" value="10"/>
+                        <label for="review_q3_5">매우 동의함</label>
+                        <br><br>
+                        <p>앞으로도 함께하고 싶은 팀원인가요?</p>
+                        <input type="radio" name="review_q4" id="review_q4_1" value="-10"/>
+                        <label for="review_q4_1">전혀 동의하지 않음</label>
+                        <input type="radio" name="review_q4" id="review_q4_2" value="-5"/>
+                        <label for="review_q4_2">동의하지 않음</label>
+                        <input type="radio" name="review_q4" id="review_q4_3" value="0"/>
+                        <label for="review_q4_3">보통</label>
+                        <input type="radio" name="review_q4" id="review_q4_4" value="5"/>
+                        <label for="review_q4_4">동의함</label>
+                        <input type="radio" name="review_q4" id="review_q4_5" value="10"/>
+                        <label for="review_q4_5">매우 동의함</label>
+                        <br><br>
+                        <p>배울점이 있는 팀원이었나요?</p>
+                        <input type="radio" name="review_q5" id="review_q5_1" value="-10"/>
+                        <label for="review_q5_1">전혀 동의하지 않음</label>
+                        <input type="radio" name="review_q5" id="review_q5_2" value="-5"/>
+                        <label for="review_q5_2">동의하지 않음</label>
+                        <input type="radio" name="review_q5" id="review_q5_3" value="0"/>
+                        <label for="review_q5_3">보통</label>
+                        <input type="radio" name="review_q5" id="review_q5_4" value="5"/>
+                        <label for="review_q5_4">동의함</label>
+                        <input type="radio" name="review_q5" id="review_q5_5" value="10"/>
+                        <label for="review_q5_5">매우 동의함</label>
+                        <br>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeModal()" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <input type="submit" class="btn btn-primary"value="작성완료">
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+        </main>
+    </div>
+</div>
+</div>
+</body>
+</html>

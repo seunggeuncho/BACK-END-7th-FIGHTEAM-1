@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <head th:replace="~{fragments/htmlHeader}" >
+    </head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div th:insert="~{fragments/mypageSide :: sidebar}" class="col-3 bd-sidebar"/>
+        <!--여기까지가 sidebar -->
+        <main class="col-9 py-md-3  bd-content" role="main">
+            <div class="bd-cheatsheet container-fluid bg-body">
+                <!-- 여기까지 공통으로 설정-->
+                <h1>결제 완료</h1>
+                <p>결제 후 잔액: <span th:text="${payment}"></span></p><br/>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="completeTask()">확인</button>
+
+
+            </script>
+        </main>
+    </div>
+</div>
+<script>
+    function completeTask() {
+        window.opener.location.href = "/post/home";
+        window.close();
+    }
+</script>
+
+</body>
+</html>

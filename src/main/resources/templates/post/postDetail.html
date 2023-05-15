@@ -1,0 +1,487 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+  <!--
+    <link rel="stylesheet" type="text/css" href="/postcss/study_project.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" ></script>-->
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/postcss/study_project.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  <script>
+function openModal(loginId, user_id) {
+    document.getElementById("modal").style.display = "block";
+    if(loginId == user_id){
+      document.getElementById("payment_btn").style.display = "none";
+    }
+    console.log(document.getElementsByName('apply_user_id').length);
+    for(var i = 0; i < document.getElementsByName('apply_user_id').length; i++){
+      console.log(document.getElementsByName('apply_user_id')[i].innerHTML);
+      if(document.getElementsByName('apply_user_id')[i].innerHTML == loginId){
+        document.getElementById("payment_btn").style.display = "none";
+      }
+    }
+}
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+function openPopup(url, name, width, height) {
+  // 팝업 창의 위치를 브라우저 가운데로 조정하기 위한 코드
+  var left = (window.screen.width / 2) - (width / 2);
+  var top = (window.screen.height / 2) - (height / 2);
+
+  // 새로운 창 열기
+  var popup = window.open('', name, 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
+  document.getElementById("paymentForm").target = name;
+  document.getElementById("paymentForm").submit();
+
+  // 새로 열린 창에 POST 요청 결과 보여주기
+  popup.location.href = url;
+}
+  </script>
+  <style>
+        #modal {
+			display: none;
+			z-index: 1;
+			position: fixed;
+            top: 0;
+            left: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+        #applier_table_div{
+          max-height: 600px;
+          overflow: auto;
+        }
+    </style>
+
+</head>
+<body>
+<div th:replace="fragments/header :: header">
+
+</div>
+<!--프로젝트 기본사항-->
+<div class="container position-relative">
+  <th:block th:if ="${session.loginId == board.user_id}">
+    <div class="form-row float-right">
+      <a class="text-decoration-none link-dark" href="#" onclick="removepost()">삭제</a>
+      <p>&nbsp;|&nbsp;</p>
+      <a class="text-decoration-none link-dark" th:href="@{|/post/update/${board.post_id}|}">수정</a>
+    </div>
+  </th:block>
+  <div clas="container">
+    <div class="row">
+      <div class="col">
+        <h1 class="display-5 font-weight-bold">프로젝트 기본</h1>
+      </div>
+      <th:block th:if = "${board.complete == '1'}">
+        <div class="col">
+          <h1 class="display-5 font-weight-bold float-right text-danger">마감</h1>
+        </div>
+      </th:block>
+    </div>
+  </div>
+  <hr class="mb-5">
+  <div id="upper" class="mb-2">
+    <div class="row mb-3">
+      <div class="col">
+        <p class="text-left h5"th:text="'모집 구분 : ' + ${board.subject}"></p>
+      </div>
+      <div class="col">
+        <p class="text-left h5" th:text="'모집 인원 : ' + ${board.count}+'명'"></p>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <p class="text-left h5" th:text="'모집 마감일 : ' + ${board.enddate}"></p>
+      </div>
+      <div class="col">
+        <p class="text-left h5" th:text="'프로젝트 시작일 : ' + ${board.startdate}"></p>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <p class="text-left h5" th:text="'진행 기간 : ' + ${board.recruitdate}+'달'"></p>
+      </div>
+      <div class="col">
+        <p class="text-left h5" th:text="'기술 스택 : ' + ${board.languageContent}"></p>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <p class="text-left h5" th:text="'모집 포지션 : ' + ${board.typeContent}"></p>
+      </div>
+      <div class="col">
+        <p class="text-left h5" th:text="'보증금 : ' + ${board.deposit}+'만원'"></p>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <h1 class="display-5 font-weight-bold">프로젝트 소개</h1>
+  <hr class="mb-5">
+  <br>
+  <div class="w-100 h-auto" data-bs-spy="scroll">
+    <pre th:text="${board.content}"></pre></br></br>
+  </div>
+  <br>
+
+  <!--채팅 & 지원 버튼-->
+  <div class="form-row float-right">
+    <form method="post" action="/chat/creating">
+      <input type="hidden" name="postUser" th:value="${board.user_id}">
+      <button class="btn btn-success" type="submit">채팅하기</button>
+    </form>
+    <p>&nbsp;</p>
+    <button type="button" class="btn btn-success" id="apply-btn" th:onclick="openModal([[${session.loginId}]],[[${board.user_id}]])">지원하기</button>
+  </div>
+  <div id="commentnum">
+    <p class="h4 font-weight-bold" th:text="${commentnum} + '개의 댓글이 있습니다.'"></p>
+  </div>
+  <br>
+
+  <!-- 댓글 입력란-->
+  <th:block th:if ="${session.loginId != null}">
+    <div>
+      <br>
+      <textarea class="form-control" id="comment" rows="3" placeholder="댓글을 입력하세요."></textarea>
+      <div class="form-row float-right">
+        <button type="button" class="btn btn-secondary" id="comment-write-btn" onclick="commentWrite()">댓글 등록</button>
+      </div>
+    </div>
+    <br><br><br>
+  </th:block>
+
+
+
+  <!--댓글 출력 부분-->
+  <div id="comment_list">
+    <div class='reply-wrap border-top' th:each ="comment : ${commentList}">
+      <div class='reply-content' >
+        <div class='reply-group'>
+          <strong class='left' th:text = "${comment.user_name}"></strong>&nbsp;&nbsp;
+          <small class='left' th:text = "${comment.commentCreatedTime}"></small>&nbsp;
+          <th:block th:if ="${session.loginId != null and #strings.equals(session.loginId, comment.user_id)}">
+            <a href='#' class='right text-decoration-none link-dark' th:onclick='commentUpdate([[${comment.comment_id}]],[[${comment.comment}]])'><span class='bi bi-pencil'></span>수정</a>&nbsp;
+            <a href='#' class='right text-decoration-none link-dark'  th:onclick='commentRemove([[${comment.comment_id}]])'><span class="bi bi-trash"></span>삭제</a>
+          </th:block>
+        </div>
+        <pre class='clearfix' th:text = "${comment.comment}">" + data[i].reply + "</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!--지원하기 모달-->
+  <div id="modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">신청자 목록</h5>
+          <button type="button" class="btn-close" onclick="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="applier_list">
+            <div id="applier_table_div">
+              <table id="applier_table" class="table">
+                <thead>
+                <th class="col_id" scope="col">아이디</th>
+                <th class="col_email" scope="col">email</th>
+                <th class="col_score" scope="col">평점</th>
+                <th class="col_status" scope="col">신청상태</th>
+                </thead>
+                                                <tbody th:if="${not #lists.isEmpty(applyList)}">
+                                                <tr th:each="apply : ${applyList}">
+                                                    <td class="col_id"name="apply_user_id"  th:text="${apply.user_id}"></td>
+                                                    <td class="col_email" th:text="${apply.email}"></td>
+                                                    <td class="col_score" th:text="${apply.score}"></td>
+                                                    <td class="col_status" th:if="${apply.apply_status == 'master'}">팀장</td>
+                                                    <td class="col_status" th:if="${apply.apply_status == 'confirm'}">참여 확정</td>
+                                                    <td class="col_status" th:if="${apply.apply_status == 'false'}">수락 대기중</td>
+                                                </tr>
+                                                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" onclick="closeModal()" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <form method="post" action="/payment" target="popup" id="paymentForm" >
+              <input type="hidden" name="post_id" th:value="${board.post_id}"/>
+              <button id="payment_btn"type="submit" name="submit" class="btn btn-primary" onclick="openPopup('/payment', 'payment', 1500, 1000); return false;" >보증금 결제</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--댓글 수정 모달-->
+  <div class="modal fade" id="replyModal" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-content">댓글수정</h4>
+        </div>
+        <div class="modal-body">
+          <!-- 수정폼 id값을 확인하세요-->
+          <div class="reply-content">
+            <input type="hidden" id="modalComment_id">
+            <textarea class="form-control" rows="4" id="replyModalComment" placeholder="내용입력"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button class="right btn btn-secondary" id="modalModBtn" th:onclick="updateReply()">수정하기</button>
+            <button class="right btn btn-secondary" th:onclick="closeReply()">취소하기</button>
+          </div>
+        </div>
+        <!-- 수정폼끝 -->
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</body>
+
+<script th:inline="javascript">
+function commentUpdate(comment_id, comment_content){
+   $("#replyModalComment").val(comment_content);
+   $("#modalComment_id").val(comment_id);
+   $("#replyModal").modal("show");
+}
+
+function makeInnerHtml(res, user_id){
+        let output = "";
+        for(let i in res){
+        output += '<div class="reply-wrap border-top">';
+        output += '<div class="reply-content">';
+        output += '<div class="reply-group">';
+        output += '<strong class="left">'+ res[i].user_name + '</strong>&nbsp;';
+        output += '<small class="left">' + res[i].commentCreatedTime + '</small>';
+         if (user_id == res[i].user_id){
+        output += '<a href="#" class="right text-decoration-none link-dark" onclick="commentUpdate('+ res[i].comment_id+',\''+res[i].comment+'\')"><span class="bi bi-pencil"></span>수정</a>';
+        output += '<a href="#" class="right text-decoration-none link-dark" onclick="commentRemove('+res[i].comment_id+')"><span class="bi bi-trash"></span>삭제</a>';
+        }
+        output += '</div>';
+        output += '<pre class="clearfix">' + res[i].comment + '</pre>';
+        output += '</div></div>';
+
+        }
+
+        document.getElementById('comment_list').innerHTML = output;
+
+        let temp = res;
+        let output2 = "<p class='h4 font-weight-bold'>" + temp.length + "개의 댓글이 있습니다.</p>";
+        document.getElementById('commentnum').innerHTML = output2;
+}
+
+function removepost(){
+  const post_id = [[${board.post_id}]];
+  if (confirm("정말 삭제하시겠습니까?") == true){
+    $.ajax({
+      type:"post",
+      url: "/post/remove",
+      data: {
+      "post_id" : post_id
+      },
+      success: function(res) {
+      var url = "/post/home";
+        window.location.href = url;
+      },
+      error: function(err){
+        console.log("요청 실패", err);
+        }
+      });
+    }else{
+      return;
+  }
+ }
+
+
+  const commentWrite = () => {
+    const contents = document.getElementById("comment").value;
+    if(contents == ""){
+    alert('내용을 입력하세요');
+    return;
+    }
+    const post_id = [[${board.post_id}]];
+    const user_id = [[${session.loginId}]];
+    $.ajax({
+        type:"post",
+        url: "/comment/save",
+        data: {
+        "post_id": post_id,
+        "comment": contents,
+        "user_id":user_id //여기다가 로그인 처리 되면 session에서 사용자 아이디로 바꾸기
+        },
+        success: function(res) {
+        /*
+        let output = "";
+        for(let i in res){
+        output += '<div class="reply-wrap border-top">';
+        output += '<div class="reply-content">';
+        output += '<div class="reply-group">';
+        output += '<strong class="left">'+ res[i].user_id + '</strong>';
+        output += '<small class="left">' + res[i].commentCreatedTime + '</small>';
+         if (user_id == res[i].user_id){
+        output += '<a href="#" class="right text-decoration-none link-dark" onclick="commentUpdate('+ res[i].comment_id+',\''+res[i].comment+'\')"><span class="bi bi-pencil"></span>수정</a>';
+        output += '<a href="#" class="right text-decoration-none link-dark" onclick="commentRemove('+res[i].comment_id+')"><span class="bi bi-trash"></span>삭제</a>';
+        }
+        output += '</div>';
+        output += '<pre class="clearfix">' + res[i].comment + '</pre>';
+        output += '</div></div>';
+
+        }
+
+        document.getElementById('comment_list').innerHTML = output;
+
+        let temp = res;
+        let output2 = "<p class='h4 font-weight-bold'>" + temp.length + "개의 댓글이 있습니다.</p>";
+        document.getElementById('commentnum').innerHTML = output2;*/
+
+        makeInnerHtml(res, user_id);
+
+        document.getElementById('comment').value = '';
+        alert("댓글작성이 완료되었습니다.");
+
+        },
+        error: function(err){
+        alert(err);
+        console.log("요청 실패", err);
+        }
+    });
+  }
+ function commentRemove(comment_id){
+    const post_id = [[${board.post_id}]];
+    const user_id = [[${session.loginId}]];
+    if (confirm("정말 삭제하시겠습니까?") == true){
+     $.ajax({
+        type:"post",
+        url: "/comment/remove",
+        data: {
+        "comment_id": comment_id,
+        "post_id" : post_id
+        },
+        success: function(res) {
+        /*
+        let temp = res;
+         let output = "";
+        for(let i in res){
+        output += "<div class='reply-wrap border-top'>";
+        output += "<div class='reply-content'>";
+        output += "<div class='reply-group'>";
+        output += "<strong class='left'>"+ res[i].user_id + "</strong>";
+        output += "<small class='left'>" + res[i].commentCreatedTime + "</small>";
+         if (user_id == res[i].user_id){
+        output += "<a href='#' class='right text-decoration-none link-dark' onclick='commentUpdate("+ res[i].comment_id+","+res[i].comment+")'><i class='bi bi-pencil'></i><span>수정</span></a>";
+        output += "<a href='#' class='right text-decoration-none link-dark' onclick='commentRemove("+res[i].comment_id+")'><span class='bi bi-trash'></span>삭제</a>";
+        }
+        output += "</div>";
+        output += "<pre class='clearfix'>" + res[i].comment + "</pre>";
+        output += "</div></div>";
+
+        }
+
+
+        document.getElementById('comment_list').innerHTML = output;
+
+        let output2 = "<p class='h4 font-weight-bold'>" + temp.length + "개의 댓글이 있습니다.</p>";
+        document.getElementById('commentnum').innerHTML = output2;*/
+        makeInnerHtml(res, user_id);
+
+        alert("댓글을 삭제하였습니다");
+
+
+        },
+        error: function(err){
+        alert(err);
+        console.log("요청 실패", err);
+        }
+     });
+    }else{
+    return;
+    }
+  }
+
+
+function closeReply(){
+   $("#replyModalComment").val();
+   $("#modalComment_id").val();
+   $("#replyModal").modal("hide");
+}
+
+function updateReply(){
+  const comment = $("#replyModalComment").val();
+  const comment_id = $("#modalComment_id").val();
+  const post_id = [[${board.post_id}]];
+  const user_id = [[${session.loginId}]];
+    $.ajax({
+        type:"post",
+        url: "/comment/update",
+        data: {
+        "comment_id": comment_id,
+        "comment": comment,
+        "post_id": post_id
+        },
+        success: function(res) {
+        /*
+        let output = "";
+        for(let i in res){
+        output += "<div class='reply-wrap border-top'>";
+        output += "<div class='reply-content'>";
+        output += "<div class='reply-group'>";
+        output += "<strong class='left'>"+ res[i].user_id + "</strong>";
+        output += "<small class='left'>" + res[i].commentCreatedTime + "</small>";
+         if (user_id == res[i].user_id){
+        output += "<a href='#' class='right text-decoration-none link-dark' onclick='commentUpdate("+ res[i].comment_id+","+res[i].comment+")'><i class='bi bi-pencil'></i><span>수정</span></a>";
+        output += "<a href='#' class='right text-decoration-none link-dark' onclick='commentRemove("+res[i].comment_id+")'><span class='bi bi-trash'></span>삭제</a>";
+        }
+        output += "</div>";
+        output += "<pre class='clearfix'>" + res[i].comment + "</pre>";
+        output += "</div></div>";
+
+        }
+
+        document.getElementById('comment_list').innerHTML = output;
+
+        let temp = res;
+        let output2 = "<p class='h4 font-weight-bold'>" + temp.length + "개의 댓글이 있습니다.</p>";
+        document.getElementById('commentnum').innerHTML = output2;*/
+
+        makeInnerHtml(res, user_id);
+
+        document.getElementById('comment').value = '';
+
+        $("#replyModalComment").val();
+        $("#modalComment_id").val();
+        alert("댓글수정이 완료되었습니다.");
+        $("#replyModal").modal("hide");
+        },
+        error: function(err){
+        alert(err);
+        console.log("요청 실패", err);
+        }
+    });
+}
+</script>
+
+</html>

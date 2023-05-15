@@ -1,0 +1,23 @@
+label{
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.ml-5 {
+  margin-left: ($spacer * 10) !important;
+}
+
+#upper {
+    text-align: center;
+}
+.col{
+    padding-left:0px;
+}
+
+#main{
+    margin-left:250px;
+}
+h1{
+    font-weight: bold;
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/htmlHeader" >
+  <meta charset="UTF-8">
+  <title>결제 내역</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+ <div class="container-fluid">
+    <div class="row flex-nowrap">
+      <div th:insert="fragments/mypageSide :: sidebar" class="col-3 bd-sidebar"/>
+
+
+      <main class="col-9 py-md-3  bd-content" role="main">
+        <div class="bd-cheatsheet container-fluid bg-body">
+          <h1>결제 내역</h1>
+          <form th:action="@{/historySubmit}" class="form-inline" method="post">
+            <div class="form-group mx-sm-1 mb-2">
+            <label for="type">결제 종류:</label>
+            <select name="type" id="type">historyList.html
+              <option value="all" th:selected="${type == null || type == 'all'}">전체</option>
+              <option value="CHARGE" th:selected="${type == 'CHARGE'}">충전</option>
+              <option value="PAYMENT" th:selected="${type == 'PAYMENT'}">결제</option>
+              <option value="REFUND" th:selected="${type == 'REFUND'}">환불</option>
+            </select>&nbsp
+              <button type="submit" class="btn btn-danger btn-sm">조회</button>
+
+            </div>
+
+          </form>
+
+            <table class="table table-striped">
+
+            <thead>
+            <tr>
+              <th>번호</th>
+              <th>결제일시</th>
+              <th>내역</th>
+              <th>금액</th>
+              <th>남은금액</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="history, i : ${historyList}">
+              <td th:text="${i.index + 1}"></td>
+              <td th:text="${#temporals.format(history.date, 'yyyy-MM-dd HH:mm:ss')}"></td>
+              <td th:text="${history.type}"></td>
+              <td th:text="${history.cost}"></td>
+              <td th:text="${history.balance}"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="chat/header :: header"/>
+  <meta charset="UTF-8">
+  <title>결제 내역</title>
+</head>
+<body>
+ <div class="container-fluid">
+    <div class="row flex-nowrap">
+      <div th:insert="fragments/mypageSide :: sidebar" class="col-3 bd-sidebar"/>
+
+
+      <main class="col-9 py-md-3  bd-content" role="main">
+        <div class="bd-cheatsheet container-fluid bg-body">
+          <h1>채팅방 내역</h1>
+
+          <table class="table table-striped">
+
+          <thead>
+          <tr>
+            <th>번호</th>
+            <th>최근 메시지 시간</th>
+            <th>최근 메시지</th>
+            <th>채팅방 이동</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="chat, i : ${chatList}">
+            <td th:text="${i.index + 1}"></td>
+            <td th:text="${#temporals.format(chat.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${chat.message}"></td>
+            <td>
+              <a th:href="@{'chat/room/enter/'+ ${chat.roomId}}">이동</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        </div>
+      </main>
+    </div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>게시글 수정</title>
+
+  <link rel="stylesheet" type="text/css" href="/postcss/study_project.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+</head>
+<body>
+<div th:replace="fragments/header :: header">
+
+</div>
+<div class="container position-relative">
+  <h1 class="display-5 font-weight-bold">프로젝트 기본</h1>
+  <hr class="mb-5">
+  <form th:action = "@{'/post/update/'+${board.post_id}}" th:object="${board}" method = "post">
+    <div id="upper" class="mb-2">
+      <div class="row">
+        <div class="col">
+          <label for ="study">모집 구분
+            <select class="selectpicker" id = "study" name = "subject" required>
+              <option value = "study" th:selected="${board.subject} == 'study'">스터디</option>
+              <option value = "project" th:selected="${board.subject} == 'project'">프로젝트</option>
+            </select>
+          </label>
+        </div>
+        <div class="col">
+          <label for = "member_count">모집 인원
+            <select class="selectpicker" id = "member_count" name = "count" size="1" required>
+              <option value = "1" th:selected="${board.count} == '1'">1명</option>
+              <option value = "2" th:selected="${board.count} == '2'">2명</option>
+              <option value = "3" th:selected="${board.count} == '3'">3명</option>
+              <option value = "4" th:selected="${board.count} == '4'">4명</option>
+              <option value = "5" th:selected="${board.count} == '5'">5명</option>
+              <option value = "6" th:selected="${board.count} == '6'">6명</option>
+              <option value = "7" th:selected="${board.count} == '7'">7명</option>
+              <option value = "8" th:selected="${board.count} == '8'">8명</option>
+              <option value = "9" th:selected="${board.count} == '9'">9명</option>
+              <option value = "10" th:selected="${board.count} == '10'"/>10명 이상</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label for ="end_date">모집 마감일
+            <input type="date" id="end_date" th:value="${board.enddate}" name = "enddate" required>
+          </label>
+        </div>
+        <div class="col">
+          <label for = "project_start">프로젝트 시작일
+            <input type="date" id = "project_start" th:value="${board.startdate}" name = "startdate" required>
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label for="during_project">진행 기간
+            <select class="selectpicker" id="during_project" name="recruitdate" required>
+              <option value="1" th:selected="${board.recruitdate} == '1'">1달</option>
+              <option value="2" th:selected="${board.recruitdate} == '2'">2달</option>
+              <option value="3" th:selected="${board.recruitdate} == '3'">3달</option>
+              <option value="4" th:selected="${board.recruitdate} == '4'">4달</option>
+              <option value="5" th:selected="${board.recruitdate} == '5'">5달</option>
+              <option value="6" th:selected="${board.recruitdate} == '6'">6달 이상</option>
+            </select>
+          </label>
+        </div>
+        <div class="col">
+          <label for = "skill">기술 스택
+            <select class="selectpicker" id="skill" required name = "languageContent" size="1" multiple ="multiple" >
+              <option value="javascript" th:selected="${#lists.contains(board.languageContent,'javascript')}">JavaScript</option>
+              <option value="nodejs" th:selected="${#lists.contains(board.languageContent,'nodejs')}">nodejs</option>
+              <option value="java" th:selected="${#lists.contains(board.languageContent,'java')}">Java</option>
+              <option value="typescript" th:selected="${#lists.contains(board.languageContent,'typescript')}">TypeScript</option>
+              <option value="react" th:selected="${#lists.contains(board.languageContent,'react')}">React</option>
+              <option value="vue" th:selected="${#lists.contains(board.languageContent,'vue')}">Vue</option>
+              <option value="go" th:selected="${#lists.contains(board.languageContent,'go')}">Go</option>
+              <option value="spring" th:selected="${#lists.contains(board.languageContent,'sprijng')}">Spring</option>
+              <option value="nextjs" th:selected="${#lists.contains(board.languageContent,'nextjs')}">NextJs</option>
+              <option value="nestjs" th:selected="${#lists.contains(board.languageContent,'nestjs')}">NestJs</option>
+              <option value="express" th:selected="${#lists.contains(board.languageContent,'express')}">Express</option>
+              <option value="c" th:selected="${#lists.contains(board.languageContent,'c')}">C</option>
+              <option value="python" th:selected="${#lists.contains(board.languageContent,'python')}">Python</option>
+              <option value="swift" th:selected="${#lists.contains(board.languageContent,'swift')}">Swift</option>
+              <option value="kotlin" th:selected="${#lists.contains(board.languageContent,'kotlin')}">Kotlin</option>
+              <option value="django" th:selected="${#lists.contains(board.languageContent,'django')}">Django</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label for ="position">모집 포지션
+            <select class="selectpicker" id="position" name = "typeContent" size="1" multiple required>
+              <option value="전체" th:selected="${#lists.contains(board.typeContent,'전체')}">전체</option>
+              <option value="backend" th:selected="${#lists.contains(board.typeContent,'backend')}">백엔드</option>
+              <option value="frontend" th:selected="${#lists.contains(board.typeContent,'frontend')}">프론트엔드</option>
+              <option value="android" th:selected="${#lists.contains(board.typeContent,'android')}">안드로이드</option>
+              <option value="ios" th:selected="${#lists.contains(board.typeContent,'ios')}">IOS</option>
+              <option value="designer" th:selected="${#lists.contains(board.typeContent,'designer')}">디자이너</option>
+            </select>
+          </label>
+        </div>
+        <div class="col">
+          <label for ="deposit">보증금
+            <select class="selectpicker" id="deposit" name="deposit" required>
+              <option value="100000" th:selected="${board.deposit} == '100000'">10만원</option>
+              <option value="200000" th:selected="${board.deposit} == '200000'">20만원</option>
+              <option value="300000" th:selected="${board.deposit} == '300000'">30만원</option>
+              <option value="400000" th:selected="${board.deposit} == '400000'">40만원</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    </div>
+    <br>
+    <h1 class="display-5 font-weight-bold">프로젝트 소개</h1>
+    <hr class="mb-5">
+    <h4>제목</h4>
+    <div id="upper">
+      <textarea class="form-control mb-2" name="title" th:text="${board.title}" required></textarea>
+      <textarea class="form-control" name="content" rows="10" cols="100" th:text="${board.content}" required></textarea></br></br>
+      <input type="submit" class= "btn btn-dark" value="수정하기">
+    </div>
+  </form>
+</div>
+<script>
+  $('.selectpicker').selectpicker();
+</script>
+</body>
+</html>

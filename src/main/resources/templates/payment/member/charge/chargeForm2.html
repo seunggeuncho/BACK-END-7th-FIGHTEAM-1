@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="~{fragments/htmlHeader}" >
+    <meta charset="UTF-8">
+    <title>보증금 충전</title>
+
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+    <div th:insert="~{fragments/mypageSide :: sidebar}" class="col-3 bd-sidebar"/>
+        <!--여기까지가 sidebar -->
+
+
+
+    <main class="col-9 py-md-3  bd-content" role="main">
+    <div class="bd-cheatsheet container-fluid bg-body">
+        <!-- 여기까지 공통으로 설정-->
+
+
+        <!-- 각자 본문 배치 -->
+        <h1>보증금 충전</h1>
+
+        <form role="form" th:action="@{/charge/submit}" method="post">
+            <div class="form-group">
+                <label for="payment-method">결제 수단 선택:</label>
+                <select name="payment-method" id="payment-method">
+                    <option value="credit-card">카카오페이</option>
+                    <option value="bank-transfer">계좌이체</option>
+                    <option value="paypal">페이팔</option>
+                </select><br><br>
+            </div>
+            <div class="form-group">
+                <label for="charge-amount">충전 금액 선택:</label>
+                <select name="charge-amount" id="charge-amount">
+                    <option value="10000">10,000원</option>
+                    <option value="20000">20,000원</option>
+                    <option value="50000">50,000원</option>
+                    <option value="100000">100,000원</option>
+                    <option value="200000">200,000원</option>
+                    <option value="300000">300,000원</option>
+                </select><br><br>
+            </div>
+            <div class="form-group">
+                <label for="balance">잔액:</label>
+                <span th:field="*{balance}" id="balance" th:text="${balance} + '원'"></span><br><br>
+            </div>
+            <div>
+                <span th:if="${errorMessage != null}" class="alert alert-danger" th:text="${errorMessage}"></span>
+            </div>
+
+            <button type="submit" class="btn btn-danger" >결제하기</button>
+            <button type="button" class="btn" onclick="submitJson()"><img src="/kakaopay/payment_icon_yellow_medium.png"> </button>
+        </form>
+    </div>
+    </main>
+    </div>
+    </div>
+
+</div>
+</body>
+</html>

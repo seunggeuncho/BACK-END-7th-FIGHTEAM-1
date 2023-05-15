@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/htmlHeader}" >
+    <meta charset="UTF-8">
+    <title>보증금 결제</title>
+</head>
+<style>
+    .fieldError {
+        border-color: #bd2130;
+    }
+</style>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<div class="container-fluid">
+
+
+    <h1>보증금 결제</h1>
+    <form role="form" th:action="@{/payment/submitPost}" th:object="${payPostDto}" method="post">
+        <!--    <input type="hidden" th:name="id" th:value="${apply.id}" />-->
+        <div class="form-group">
+            <input type="hidden" th:field="*{post_id}"/>
+            <input type="hidden" th:field="*{count}"/>
+            <input type="hidden" th:field="*{startdate}"/>
+            <input type="hidden" th:field="*{enddate}"/>
+            <input type="hidden" th:field="*{date}"/>
+            <input type="hidden" th:field="*{recruitdate}"/>
+            <input type="hidden" th:field="*{deposit}"/>
+            <input type="hidden" th:field="*{typeContent}"/>
+            <input type="hidden" th:field="*{languageContent}"/>
+            <input type="hidden" th:field="*{title}"/>
+            <input type="hidden" th:field="*{content}"/>
+            <input type="hidden" th:field="*{user_id}"/>
+            <input type="hidden" th:field="*{subject}"/>
+            <input type="hidden" th:field="*{complete}"/>
+            <input type="hidden" th:field="*{userDeposit}"/>
+
+
+        </div>
+        <div class="form-group">
+            <label for="postId">결제 내역: 게시글 </label>
+            <span th:text="*{title}" id="postId"></span></br></br>
+        </div>
+        <div class="form-group">
+            <label for="cost">결제 금액</label>
+            <span  id="cost" th:text="${payPostDto.deposit} + '원'" ></span><br><br>
+        </div>
+        <div class="form-group">
+            <label for="balance">현재잔액:</label>
+            <span  id="balance" th:text="${payPostDto.userDeposit} + '원'" ></span><br><br>
+        </div>
+        <div class="form-group">
+            <label>결제후 잔액:</label>
+            <span  th:text="${payPostDto.userDeposit} - ${payPostDto.deposit} + 원"></span></br></br>
+        </div>
+
+        <div>
+            <span th:if="${errorMessage != null}" class="alert alert-danger" th:text="${errorMessage}"></span></br></br>
+        </div>
+        <button type="submit" class="btn btn-danger" formaction="/charge">보증금 충전</button>
+        <button type="submit" class="btn btn-danger" >보증금 결제</button>
+
+    </form>
+</div>
+<!--        </main>-->
+<!--        </div>-->
+<!--</div>-->
+</body>
+</html>
+
+

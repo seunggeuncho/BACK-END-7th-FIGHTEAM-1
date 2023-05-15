@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/htmlHeader">
+    <title>회원정보수정</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div th:insert="fragments/mypageSide :: sidebar" class="col-3 bd-sidebar"/>
+
+
+        <main class="col-9 py-md-3  bd-content" role="main">
+            <div class="bd-cheatsheet container-fluid bg-body">
+                <form action="/user/edit" method="post">
+                    <h2>회원정보 관리</h2>
+                    <div>
+                        <label><b>평점:</b> </label>
+                        <span th:text="${userScore}"></span>       <!--이메일은 수정불가. 값을 불러오기만-->
+                    </div>
+                    <div>
+                        <label><b>현재 비밀번호</b></label>
+                        <input type="password" placeholder="비밀번호를 입력하세요.">
+                    </div>
+                    <div>
+                        <label for="passwd"><b>비밀번호:</b> </label>
+                        <input id="passwd" name="passwd" type="password" class="input" onchange="check_pw()"
+                               placeholder="새 비밀번호를 입력하세요.">
+                    </div>
+                    <div>
+                        <label for="passwd"><b>비밀번호 확인:</b> </label>
+                        <input id="passwd2" name="passwd2" type="password" class="input" onchange="check_pw()"
+                               placeholder="새 비밀번호를 한번 더 입력하세요.">
+                        <span id="check"></span>
+                    </div>
+<!--                    <div>-->
+<!--                        <label for="name"><b>이름:</b> </label>-->
+<!--                        <input id="name" name="name" type="name" class="input" placeholder="이름을 입력하세요.">-->
+<!--                    </div>-->
+                    <div>
+                        <label for="tel"><b>전화번호:</b> </label>
+                        <input id="tel" name="tel" type="tel" class="input" placeholder="전화번호를 입력하세요.">
+                    </div>
+                    <input type="submit" value="변경" class="btn btn-danger ">
+                </form>
+
+
+            </div>
+        </main>
+    </div>
+</div>
+</div>
+</body>
+</html>

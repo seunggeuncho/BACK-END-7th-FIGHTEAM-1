@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>마이페이지</title>
+</head>
+<body>
+<h1>마이페이지</h1>
+<p th:if="${session.get('loginId') != null}">
+    현재 로그인된 사용자: <span th:text="${session.get('loginId')}"></span>
+</p>
+<p th:if="${session.get('loginId') == null}">
+    로그인되어 있지 않습니다.
+</p>
+<p>
+    <a href="/charge"> 보증금 충전 </a>
+</p>
+<p>
+    <a href="/history"> history 확인 </a>
+</p>
+<p>
+    <a href="/login">로그인</a>
+</p>
+<form method="post" action="/payment" target="popup">
+    <input type="hidden" name="post_id" value="1"/>
+    <button onclick="openPopup('/payment', 'payment', 1500, 1000); return false;" type="submit" name="submit">보증금 결제</button>
+</form>
+<script>
+    function openPopup(url, name, width, height) {
+        // 팝업 창의 위치를 브라우저 가운데로 조정하기 위한 코드
+        var left = (window.screen.width / 2) - (width / 2);
+        var top = (window.screen.height / 2) - (height / 2);
+
+        // 새로운 창 열기
+        var popup = window.open('', name, 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
+        document.forms[0].target = name;
+        document.forms[0].submit();
+
+        // 새로 열린 창에 POST 요청 결과 보여주기
+        popup.location.href = url;
+    }
+</script>
+</body>
+</html>
