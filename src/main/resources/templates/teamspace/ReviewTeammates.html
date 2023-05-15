@@ -87,7 +87,7 @@
             <td th:if="${apply.apply_status == 'master'}">팀장</td>
             <td th:if="${apply.apply_status == 'sub_master'}">부팀장</td>
             <td th:text="${apply.score}"></td>
-            <td th:if="${not rvd_list.contains(apply.user_id) and apply.user_id != user_id}"><input type="button" class="btn btn-primary" th:onclick="selectUser([[${apply.user_id}]],[[${apply.user_id}]])" value="리뷰 작성하기"/></td>
+            <td th:if="${not rvd_list.contains(apply.user_id) and apply.user_id != user_id}"><input type="button" class="btn btn-primary" th:onclick="selectUser([[${apply.user_id}]],[[${teamspace_id}]])" value="리뷰 작성하기"/></td>
             <td th:if="${apply.user_id == user_id}">본인</td>
             <td th:if="${rvd_list.contains(apply.user_id)}">작성완료</td>
         </tr>
@@ -156,7 +156,7 @@
                         <input type="radio" name="review_q4" id="review_q4_5" value="10"/>
                         <label for="review_q4_5">매우 동의함</label>
                         <br><br>
-                        <p>?</p>
+                        <p>배울점이 있는 팀원이었나요?</p>
                         <input type="radio" name="review_q5" id="review_q5_1" value="-10"/>
                         <label for="review_q5_1">전혀 동의하지 않음</label>
                         <input type="radio" name="review_q5" id="review_q5_2" value="-5"/>
