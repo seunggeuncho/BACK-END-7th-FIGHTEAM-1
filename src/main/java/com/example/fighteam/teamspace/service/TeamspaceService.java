@@ -203,6 +203,7 @@ public class TeamspaceService {
         String sql4 = "select * from attendance where teamspace_id = ? and FORMATDATETIME(calendar_date, 'yyyy-MM-dd') = ?";
         String sql_getapply = "select apply_id from apply where user_id = ? and teamspace_id =?";
         String sql_history_insert = "insert into DEPOSIT_HISTORY(user_id, teamspace_id, history_date, type, cost) values(?,?,current_date(),?,?)";
+        String sql_histroy_get = "insert into deposit_history(user_id, teamspace_id, history_date, type, cost) values(?,?,current_date(), ?,?)";
         List<AttendanceResponseDto> attend_list = jdbcTemplate.query(sql4, new Object[]{teamspace_id, calendar_date}, new RowMapper<AttendanceResponseDto>() {
             @Override
             public AttendanceResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -222,7 +223,12 @@ public class TeamspaceService {
             if(!attend_list.get(i).getAtt_check().equals("attend")){
                 Long apply_id = jdbcTemplate.queryForObject(sql_getapply, new Object[]{attend_list.get(i).getUser_id(), teamspace_id}, Long.class);
                 penaltyService.penaltyLogic(apply_id,cost);
-                jdbcTemplate.update(sql_history_insert, attend_list.get(i).getUser_id(),teamspace_id, attend_list.get(i).getAtt_check(),cost);
+                jdbcTemplate.update(sql_history_insert, attend_list.get(i).getUser_id(),teamspace_id, attend_list.get(i).getAtt_check(),cost*-1);
+                for(int x = 0; x < attend_list.size(); x++){
+                    if(x != i){
+                        jdbcTemplate.update(sql_histroy_get,attend_list.get(x).getUser_id(),teamspace_id, "get",cost/(attend_list.size()-1));
+                    }
+                }
             }
         }
     }

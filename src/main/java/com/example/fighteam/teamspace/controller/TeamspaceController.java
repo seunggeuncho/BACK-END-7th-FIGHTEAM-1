@@ -82,7 +82,10 @@ public class TeamspaceController {
 
     @GetMapping(value = "/CreateTeamspacePro"/*,consumes = "application/x-www-form-urlencoded"*/)
     public String CreateTeamspacePro(@RequestParam("post_id") String post_id,@RequestParam("teamspace_name") String teamspace_name,
-                                     @RequestParam("sub_master")Long sub_master, Model model,HttpSession session){
+                                     @RequestParam(value = "sub_master", required = false, defaultValue = "0")Long sub_master, Model model,HttpSession session){
+        if(sub_master == 0){
+            return "redirect:/TeamspaceErrorManager?error_code=ns";//need sub_master
+        }
         String url = "";
         if(session.getAttribute("loginId") == null){
             url = "redirect:/TeamspaceErrorManager?error_code=nl"; //need login

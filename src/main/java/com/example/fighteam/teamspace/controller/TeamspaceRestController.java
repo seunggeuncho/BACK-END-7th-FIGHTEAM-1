@@ -74,6 +74,8 @@ public class TeamspaceRestController {
             url = "<script>alert('해당 팀의 마스터권한이 필요한 서비스입니다.');window.location.href='http://localhost:8080/post/home';</script>";
         }else if(error_code.equals("et")){//exist teamspace
             url = "<script>alert('이미 생성된 팀스페이스 입니다.');window.location.href='http://localhost:8080/myPageTeamspace';</script>";
+        }else if(error_code.equals("ns")){//need sub master
+            url = "<script>alert('서브마스터를 지정해 주세요.');window.location.href='http://localhost:8080/myPageTeamspace';</script>";
         }
         return url;
     }
