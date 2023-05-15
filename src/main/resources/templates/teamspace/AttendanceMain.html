@@ -52,7 +52,18 @@
             }
         });
     }
+    function teamCloseBtn(teamspace_id){
+      if(isMember_result != 'master'){
+        alert('팀스페이스 종료는 마스터 권한이 필요합니다');
+      }
+      else if(isMember_result == 'master'){
+        if (!confirm("정말 팀스페이스 활동을 종료하시겠습니까?")) {
 
+        } else {
+            window.location.href =  "http://localhost:8080/ChangeStatusReview?teamspace_id="+teamspace_id;
+        }
+      }
+    }
 
 
     var clickedDate = '2023-05-02';
@@ -397,6 +408,7 @@
 
     <div id='calendar'></div>
 </div>
+            <button th:onclick="teamCloseBtn([[${teamspace_id}]])" class="btn btn-primary">팀 스페이스 종료</button>
         </main>
     </div>
 </div>

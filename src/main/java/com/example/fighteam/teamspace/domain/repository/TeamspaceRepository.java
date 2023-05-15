@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TeamspaceRepository extends JpaRepository<Attendance, Long> {
+public interface TeamspaceRepository extends JpaRepository<Teamspace, Long> {
 }
