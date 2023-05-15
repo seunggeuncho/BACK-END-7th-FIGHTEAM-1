@@ -25,14 +25,15 @@ public class PenaltyService {
 
     public int penaltyLogic (Long id, int cost) {
 
-        Apply findApply = applyRepository.findByMember(id);
+        Apply findApply = applyRepository.findApplyWithPostAndUser(id);
+        User findUser = findApply.getUser();
         findApply.minusUserDeposit(cost);
         Long postId = findApply.getPost().getId();
 
         int countMember = applyRepository.findCountByPostId(postId); //벌금을 내는 사람은 빼고 계산
 
-        int returnPenalty = cost / (countMember-1);//벌금 / 같은 팀원의 수
-        List<Apply> anotherApply = applyRepository.findAnotherApply(id, postId);
+        int returnPenalty = cost / (countMember - 1);//벌금 / 같은 팀원의 수
+        List<Apply> anotherApply = applyRepository.findAnotherApply(findUser.getId(), postId);
 
         //여기 벌크연산하는게 나을듯
         for (Apply apply : anotherApply) {
