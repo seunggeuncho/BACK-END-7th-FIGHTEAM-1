@@ -63,6 +63,15 @@ public class PenaltyService {
         for (Apply apply : applyList) {
             User user = apply.getUser();
             user.plusDeposit(apply.getUserDeposit());
+            History history = History.builder().
+                    member(user)
+                    .cost(apply.getUserDeposit())
+                    .type(HistoryType.REFUND)
+                    .balance(user.getDeposit())
+                    .build();
+            historyRepository.saveHistory(history);
+
+
         }
     }
 }
