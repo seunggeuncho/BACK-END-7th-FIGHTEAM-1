@@ -123,6 +123,8 @@ public class TeamspaceService {
     }
     public int StatusChangeToReview(String teamspace_id){
         String change_sql = "update teamspace set status = 'review' where teamspace_id = ?";
+        String get_post_id = "select post_id from teamspace where teamspace_id = ?";
+        penaltyService.returnDeposit(jdbcTemplate.queryForObject(get_post_id,new Object[]{teamspace_id},Long.class));
         return jdbcTemplate.update(change_sql,teamspace_id);
     }
     public boolean isMaster(Long user_id, Long post_id){
