@@ -37,7 +37,7 @@
             <td th:if="${team.apply_status == 'master'}">마스터</td>
             <td th:if="${team.apply_status == 'confirm'}">멤버</td>
             <td th:if="${team.apply_status == 'false'}">수락 대기</td>
-            <td th:if="${team.teamspace_status}=='close'">
+            <td th:if="${team.teamspace_status}=='review'">
                 종료
             </td>
             <td th:if="${team.teamspace_status}=='running'">
@@ -46,7 +46,8 @@
             <td th:if="${team.teamspace_status}=='wait'">
                 대기중
             </td>
-            <td th:if="${team.teamspace_status}=='close'">
+
+            <td th:if="${team.teamspace_status}=='review'">
                 <form method="get" action="/ReviewTeammates">
                     <input type="hidden" th:value="${team.teamspace_id}" name="teamspace_id"/>
                     <input type="submit" class="btn btn-primary" value="리뷰 작성하기"/>

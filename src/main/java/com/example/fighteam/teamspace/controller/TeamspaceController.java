@@ -194,7 +194,8 @@ public class TeamspaceController {
         if(session.getAttribute("loginId") == null){
             url = "redirect:/TeamspaceErrorManager?error_code=nl"; //need login
         }else{
-            Long session_user_id = Long.valueOf(session.getAttribute("loginId").toString());;
+            Long session_user_id = Long.valueOf(session.getAttribute("loginId").toString());
+            System.out.println(teamspaceService.isMemberByTsid(session_user_id,teamspace_id));
             if(teamspaceService.isMemberByTsid(session_user_id,teamspace_id)){
                 int row = teamspaceService.writeReview(teamspace_id, Long.valueOf(session.getAttribute("loginId").toString()),user_id,q1,q2,q3,q4,q5);
                 if(row == 1 ){
@@ -204,6 +205,7 @@ public class TeamspaceController {
             }else{
                 url = "redirect:/TeamspaceErrorManager?error_code=nm"; //not member
             }
+
         }
         return url;
     }
@@ -217,6 +219,22 @@ public class TeamspaceController {
             List<TeamspaceMyPageResponseDto> team_list = teamspaceService.myPageTeamspaceList(user_id);
             model.addAttribute("team_list",team_list);
             url = "teamspace/myPageTeamspace";
+        }
+        return url;
+    }
+    @GetMapping("/ChangeStatusReview")
+    public String ChangeStatusReview(@RequestParam("teamspace_id") String teamspace_id, HttpSession session){
+        String url = "";
+        if(session.getAttribute("loginId") == null){
+            url = "redirect:/TeamspaceErrorManager?error_code=nl"; //need login
+        }else {
+            Long session_user_id = Long.valueOf(session.getAttribute("loginId").toString());
+            if (teamspaceService.isMemberByTsid(session_user_id, Long.valueOf(teamspace_id))) {
+                teamspaceService.StatusChangeToReview(teamspace_id);
+                url = "redirect:/myPageTeamspace";
+            } else {
+                url = "redirect:/TeamspaceErrorManager?error_code=nm"; //not member
+            }
         }
         return url;
     }

@@ -113,7 +113,7 @@ public class TeamspaceService {
     public String CreateTeamspace(String post_id, Long master, Long sub_master,String teamspace_name){
         String delete_sql = "delete from apply where post_id = ? and status = 'false'";
         jdbcTemplate.update(delete_sql,post_id);
-        String insert_sql = "insert into teamspace( post_id, teamspace_name, master, sub_master) values( ?, ?, ?,?)";
+        String insert_sql = "insert into teamspace( post_id, teamspace_name, master, sub_master,status) values( ?, ?, ?,?,'running')";
         jdbcTemplate.update(insert_sql, post_id, teamspace_name, master, sub_master);
         String select_sql = "select  teamspace_id from teamspace where post_id = ?";
         String teamspace_id = jdbcTemplate.queryForObject(select_sql, new Object[]{post_id}, String.class);
@@ -121,7 +121,10 @@ public class TeamspaceService {
         jdbcTemplate.update(update_sql,teamspace_id,post_id);
         return teamspace_id;
     }
-
+    public int StatusChangeToReview(String teamspace_id){
+        String change_sql = "update teamspace set status = 'review' where teamspace_id = ?";
+        return jdbcTemplate.update(change_sql,teamspace_id);
+    }
     public boolean isMaster(Long user_id, Long post_id){
         String sql = "select status from apply where user_id = ? and post_id = ?";
         String status = null;
@@ -158,10 +161,11 @@ public class TeamspaceService {
         }catch (EmptyResultDataAccessException e){
             status = null;
         }
-        if(status == null){
-            return false;
-        }else{
+        System.out.println(status);
+        if(status != null){
             return true;
+        }else{
+            return false;
         }
     }
     public List<Long> getReviewList(Long teamspace_id, Long user_id){
@@ -179,7 +183,7 @@ public class TeamspaceService {
                 "values( ?,?,?,?,?,?,?,?)";
         String sql2 = "update users set score = score + ? where user_id = ?";
         int rowCnt = jdbcTemplate.update(sql,user_rvr,user_rvd,teamspace_id,q1,q2,q3,q4,q5);
-        jdbcTemplate.update(sql2,(q1+q2+q3+q4+q5)/5);
+        jdbcTemplate.update(sql2,(q1+q2+q3+q4+q5)/5,user_rvd);
         return rowCnt;
     }
 
@@ -232,7 +236,9 @@ public class TeamspaceService {
                     teamspaceMyPageResponseDto.setTeamspace_id(String.valueOf(rs.getLong("teamspace_id")));
                 }else{
                     teamspaceMyPageResponseDto.setTeamspace_id(String.valueOf(rs.getLong("teamspace_id")));
-                    teamspaceMyPageResponseDto.setTeamspace_status("running");//진행중
+                    String sql2 = "select status from teamspace where teamspace_id = ? ";
+                    String team_status = jdbcTemplate.queryForObject(sql2, new Object[]{String.valueOf(rs.getLong("teamspace_id"))},String.class);
+                    teamspaceMyPageResponseDto.setTeamspace_status(team_status);//진행중
                 }//db생성시 변경
                 return teamspaceMyPageResponseDto;
             }

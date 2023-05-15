@@ -16,4 +16,5 @@ public class Teamspace {
     private String teamspace_name;
     private long master;
     private long sub_master;
+    private String status;
 }
