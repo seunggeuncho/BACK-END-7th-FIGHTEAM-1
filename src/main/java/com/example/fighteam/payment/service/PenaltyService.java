@@ -57,4 +57,12 @@ public class PenaltyService {
         return userDeposit;
 
     }
+
+    public void returnUserDeposit(Long postId) {
+        List<Apply> applyList = applyRepository.findApplyWithPost(postId);
+        for (Apply apply : applyList) {
+            User user = apply.getUser();
+            user.plusDeposit(apply.getUserDeposit());
+        }
+    }
 }
