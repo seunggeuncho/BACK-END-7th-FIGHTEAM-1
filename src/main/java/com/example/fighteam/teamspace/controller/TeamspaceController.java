@@ -196,19 +196,12 @@ public class TeamspaceController {
         }else{
             Long session_user_id = Long.valueOf(session.getAttribute("loginId").toString());
             System.out.println(teamspaceService.isMemberByTsid(session_user_id,teamspace_id));
-            if(teamspaceService.isMemberByTsid(session_user_id,teamspace_id)){
-                int row = teamspaceService.writeReview(teamspace_id, Long.valueOf(session.getAttribute("loginId").toString()),user_id,q1,q2,q3,q4,q5);
-                if(row == 1 ){
-                    //review가 잘 등록되었는지 확인하는 코드 추가할것
-                }
-                url = "redirect:/ReviewTeammates?teamspace_id="+teamspace_id;
-            }else{
-                url = "redirect:/TeamspaceErrorManager?error_code=nm"; //not member
-            }
-
+            int row = teamspaceService.writeReview(teamspace_id, Long.valueOf(session.getAttribute("loginId").toString()),user_id,q1,q2,q3,q4,q5);
+            url = "redirect:/ReviewTeammates?teamspace_id="+teamspace_id;
         }
         return url;
     }
+
     @GetMapping("/myPageTeamspace")
     public String myPageTeamspace(HttpSession session,Model model){
         String url = "";
