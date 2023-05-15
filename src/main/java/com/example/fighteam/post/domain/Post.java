@@ -23,6 +23,7 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
     private String title;
+    @Column(length = 3000)
     private String content;
     private LocalDateTime startdate;
     private LocalDateTime enddate;
