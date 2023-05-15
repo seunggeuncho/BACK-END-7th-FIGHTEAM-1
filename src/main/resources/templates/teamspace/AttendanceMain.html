@@ -44,7 +44,7 @@
             contentType: 'application/json',
             success: function(response) {
                 for(let i = 0; i < response.length; i++){
-                    document.getElementById(response[i]+"user_id").value = document.getElementById(response[i]+"user_id2").value;
+                    document.getElementById(response[i]+'user_id').value = document.getElementById(response[i]+'user_id2').value;
                 }
             },
             error: function(xhr, status, errorThrown) {
