@@ -39,7 +39,7 @@ public class TeamspaceService {
 
     public List<HistoryDto> getHistory(Long user_id, Long teamspace_id) {
         String sql = "select * from deposit_history where user_id = ? and teamspace_id = ?";
-        List<HistoryDto> history = jdbcTemplate.query(sql, new Object[]{teamspace_id, user_id}, new RowMapper<HistoryDto>() {
+        List<HistoryDto> history = jdbcTemplate.query(sql, new Object[]{ user_id,teamspace_id}, new RowMapper<HistoryDto>() {
             @Override
             public HistoryDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
