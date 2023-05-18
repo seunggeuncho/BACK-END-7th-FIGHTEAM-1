@@ -7,8 +7,8 @@
 ## Scheduling
 - Notion을 활용한 스프린트 관리
 <img width="1146" alt="image" src="https://github.com/KIMHYOJUN97/BACK-END-7th-FIGHTEAM/assets/77912953/1d6f3493-db03-47b1-97e6-2a14384a5c95">
-- 구글 스프레드 시트지를 활용하여 WBS 관리
 
+- 구글 스프레드 시트지를 활용하여 WBS 관리
 ![image](https://github.com/KIMHYOJUN97/BACK-END-7th-FIGHTEAM/assets/77912953/a46d1b2d-b7df-4cfd-8c92-2c25867acb0e)
 
 ## ER Diagram
