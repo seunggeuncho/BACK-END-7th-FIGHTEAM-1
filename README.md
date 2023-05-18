@@ -64,7 +64,7 @@
 
 ### Database
 
-![Oracle](https://img.shields.io/badge/Oracle-F80000A?style=flat&logo=Gradle&logoColor=white)
+![Oracle](https://img.shields.io/badge/Oracle-F80000A?style=flat&logo=Oracle&logoColor=white)
 
 ### Build Tool
 
