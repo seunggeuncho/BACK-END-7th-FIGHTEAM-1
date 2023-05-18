@@ -18,6 +18,7 @@
 ### 기능 페이지
 <img width="1183" alt="image" src="https://github.com/KIMHYOJUN97/BACK-END-7th-FIGHTEAM/assets/77912953/fe123484-701f-42ac-9625-b20c7a31d935">
 <img width="1154" alt="image" src="https://github.com/KIMHYOJUN97/BACK-END-7th-FIGHTEAM/assets/77912953/968d0a7d-7cb0-4930-a56d-0acec72582de">
+
 ### [@김효준] (https://github.com/KIMHYOJUN97)
 - **스크럼 관리 및 채팅방**
   - 채팅방 생성
