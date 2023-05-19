@@ -1,5 +1,7 @@
 # BACK-END 7th/3조 팀원 매칭 서비스 프로젝트 FIGHTEAM
-- Website : http://27.96.135.23:8080/post/home
+- Website : ~~http://27.96.135.23:8080/post/home~~
+
+현재 배포 운영이 종료되었습니다.
 
 ## Project Architecture
 <img width="1449" alt="image" src="https://github.com/KIMHYOJUN97/BACK-END-7th-FIGHTEAM/assets/77912953/535a85ff-cf4d-4423-a2c2-b27bf44590dc">
